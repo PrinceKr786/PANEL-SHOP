@@ -48,12 +48,11 @@
         import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
         import { markSeen } from '../../assets/scripts/badges.js';
         import { db, ref, onValue } from '../../assets/scripts/firebase.js';
-        const init = () => {
+        document.addEventListener('DOMContentLoaded', () => {
             loadSidebar();
             markSeen('gateway');
-        };
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-        onValue(ref(db, 'gateway_payments'), (snap) => { if (!document.getElementById('pageBadge')?.isConnected) return;
+        });
+        onValue(ref(db, 'gateway_payments'), (snap) => {
             const data = snap.val();
             if (!data) { const e = document.getElementById('pageBadge'); if(e){e.textContent='';e.style.display='none';} return; }
             const lastSeen = parseInt(localStorage.getItem('adminSeen_gateway') || '0') || Date.now();

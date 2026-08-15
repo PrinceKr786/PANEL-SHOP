@@ -58,7 +58,7 @@ function i() {
     const e = document.getElementById("contactLoader");
     e && e.classList.add("hidden")
 }
-document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
+document.addEventListener("DOMContentLoaded", () => {
     assertAdmin(() => {
         !async function() {
                 s();
@@ -159,4 +159,4 @@ document.addEventListener("DOMContentLoaded", () => (function(){ if(document.rea
                 }(e.target.closest(".ticket-close-btn").dataset.id)
             })
     })
-} __boot(); }));
+});

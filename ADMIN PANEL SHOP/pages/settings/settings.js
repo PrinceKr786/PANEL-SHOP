@@ -28,7 +28,7 @@ function n() {
     const e = document.getElementById("settingsLoader");
     e && e.classList.add("hidden")
 }
-document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
+document.addEventListener("DOMContentLoaded", () => {
     assertAdmin(() => {
         !async function() {
             t();
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => (function(){ if(document.rea
             document.getElementById("cryptoQrPreview").innerHTML = e.target.value ? `<img src="${e.target.value}" style="max-width:180px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);margin-top:10px;">` : ""
         })
     })
-} __boot(); })), window.saveAutoPayment = async function() {
+}), window.saveAutoPayment = async function() {
     const a = document.getElementById("setZapKey").value.trim();
     if (!a) return e("Enter API Key", "error");
     t();

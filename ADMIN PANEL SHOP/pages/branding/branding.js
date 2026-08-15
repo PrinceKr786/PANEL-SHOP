@@ -164,7 +164,7 @@ function s() {
     const e = document.getElementById("brandingLoader");
     e && e.classList.add("hidden")
 }
-document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
+document.addEventListener("DOMContentLoaded", () => {
     assertAdmin(() => {
         t(), async function() {
             try {
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => (function(){ if(document.rea
             t.target === e && closeEditPromo()
         }), document.getElementById("tabContentPromotions")?.classList.contains("active") && o()
     })
-} __boot(); })), window.loadPromotions = o, window.togglePromo = async (e, t) => {
+}), window.loadPromotions = o, window.togglePromo = async (e, t) => {
     r();
     try {
         await update(ref(db, `promotions/${e}`), {

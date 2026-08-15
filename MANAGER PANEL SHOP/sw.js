@@ -1,4 +1,4 @@
-﻿const CACHE = 'nexus-manager-v3';
+﻿const CACHE = 'nexus-manager-v2';
 const STATIC_ASSETS = [
   'pages/index/index.html', 'pages/dashboard/dashboard.html', 'pages/users/users.html', 'pages/purchases/purchases.html',
   'pages/manual/manual.html', 'pages/crypto/crypto.html',
@@ -10,7 +10,7 @@ const STATIC_ASSETS = [
   'pages/add-panel/add-panel.css', 'pages/manage-panels/manage-panels.css', 'pages/categories/categories.css',
   'pages/coupons/coupons.css', 'pages/contact/contact.css',
   'assets/scripts/firebase.js', 'assets/scripts/auth-guard.js', 'assets/scripts/security.js',
-  'assets/scripts/sidebar-loader.js', 'assets/scripts/badges.js', 'assets/scripts/navigator.js',
+  'assets/scripts/sidebar-loader.js', 'assets/scripts/badges.js',
   'pages/index/index.js', 'pages/dashboard/dashboard.js', 'pages/users/users.js', 'pages/purchases/purchases.js',
   'pages/manual/manual.js', 'pages/crypto/crypto.js',
   'pages/add-panel/add-panel.js', 'pages/manage-panels/manage-panels.js', 'pages/categories/categories.js',

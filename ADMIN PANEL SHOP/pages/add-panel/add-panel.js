@@ -123,7 +123,7 @@ function o(e, t = "success") {
         a.style.animation = "slideOutRight 0.3s forwards", setTimeout(() => a.remove(), 300)
     }, 3e3)
 }
-document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
+document.addEventListener("DOMContentLoaded", () => {
     assertAdmin(() => {
         document.getElementById("btnAddPlanRow")?.addEventListener("click", n), document.getElementById("btnSubmitPanel")?.addEventListener("click", l), ["panelName", "panelLogo", "panelYt", "panelDesc"].forEach(e => {
             document.getElementById(e)?.addEventListener("input", a)
@@ -142,4 +142,4 @@ document.addEventListener("DOMContentLoaded", () => (function(){ if(document.rea
             document.hidden || e()
         }), window.addEventListener("focus", e)
     })
-} __boot(); })), window.updateLivePreview = a;
+}), window.updateLivePreview = a;

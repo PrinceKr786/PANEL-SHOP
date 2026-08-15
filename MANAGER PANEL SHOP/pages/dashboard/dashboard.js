@@ -13,7 +13,7 @@ import {
 } from "../../assets/scripts/auth-guard.js";
 let t = null,
     e = !1;
-document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
+document.addEventListener("DOMContentLoaded", () => {
     assertManager(() => async function() {
         if (!e) {
             e = !0;
@@ -149,4 +149,4 @@ document.addEventListener("DOMContentLoaded", () => (function(){ if(document.rea
                     }(o)
             }(o, i)
     }())
-} __boot(); }));
+});

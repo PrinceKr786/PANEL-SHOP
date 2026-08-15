@@ -46,9 +46,7 @@
     <script type="module" src="purchases.js"></script>
     <script type="module">
         import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
-        const init = () => loadSidebar();
-
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+        document.addEventListener('DOMContentLoaded', () => loadSidebar());
     </script>
     <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
 </body>

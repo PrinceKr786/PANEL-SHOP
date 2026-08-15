@@ -49,12 +49,11 @@
         import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
         import { markSeen } from '../../assets/scripts/badges.js';
         import { db, ref, onValue } from '../../assets/scripts/firebase.js';
-        const init = () => {
+        document.addEventListener('DOMContentLoaded', () => {
             loadSidebar();
             markSeen('managers');
-        };
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-        onValue(ref(db, 'managers'), (snap) => { if (!document.getElementById('pageBadge')?.isConnected) return;
+        });
+        onValue(ref(db, 'managers'), (snap) => {
             const data = snap.val();
             const el = document.getElementById('pageBadge');
             if (!el) return;

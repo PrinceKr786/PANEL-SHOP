@@ -126,7 +126,7 @@ function c() {
     const e = document.getElementById("panelMngLoader");
     e && e.classList.add("hidden")
 }
-document.addEventListener("DOMContentLoaded", async () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} async function __boot(){
+document.addEventListener("DOMContentLoaded", async () => {
     assertManager(async () => {
         await n(), a(), document.getElementById("btnSaveEditPanel")?.addEventListener("click", l), document.addEventListener("visibilitychange", () => {
             document.hidden || n()
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => (function(){ if(docume
             e.target.closest(".cdrop") || document.querySelectorAll(".cdrop-menu.open").forEach(e => e.classList.remove("open"))
         })
     })
-} __boot(); })), window.togglePanelStatus = async (e, t) => {
+}), window.togglePanelStatus = async (e, t) => {
     i();
     try {
         await update(ref(db, `panels/${e}`), {

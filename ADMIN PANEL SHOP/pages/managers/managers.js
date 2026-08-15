@@ -111,7 +111,7 @@ function hideLoader() {
     el && el.classList.add("hidden");
 }
 
-document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
+document.addEventListener("DOMContentLoaded", () => {
     assertAdmin(() => loadManagers());
     document.getElementById("managerUidInput")?.addEventListener("keydown", e => { if (e.key === "Enter") addManager(); });
-} __boot(); }));
+});
