@@ -1,39 +1,39 @@
 {
   "rules": {
     ".read": false,
-    ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+    ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
 
     "admins": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$uid": { ".validate": "$uid === auth.uid" }
     },
 
     "managers": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$uid": {
-        ".read": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+        ".read": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
       }
     },
 
     "users": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+        ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         "balance": {
-          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
           ".validate": "newData.isNumber() && newData.val() >= 0"
         },
         "referralClaimable": {
-          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
           ".validate": "newData.isNumber() && newData.val() >= 0"
         },
-        "banned": { ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'" },
-        "status": { ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)" },
+        "banned": { ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'" },
+        "status": { ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)" },
         "role": {
-          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || newData.val() === 'user'",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || newData.val() === 'user'",
           ".validate": "newData.val().matches(/^(user|manager|admin)$/)"
         },
         "username": { ".validate": "newData.isString() && newData.val().matches(/^[a-zA-Z0-9_-]{3,30}$/)" },
@@ -43,15 +43,15 @@
     },
 
     "transactions": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+        ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         "$txId": {
           ".validate": "newData.hasChildren(['type', 'amount', 'status', 'date', 'desc'])",
           "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
           "status": {
-            ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+            ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
             ".validate": "newData.val().matches(/^(pending|completed|success|failed)$/)"
           },
           "type": { ".validate": "newData.val().matches(/^(deposit_manual|deposit_auto|deposit_gateway|deposit_crypto|purchase|refund|admin_edit)$/)" }
@@ -60,10 +60,10 @@
     },
 
     "purchases": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+        ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         "$purchaseId": {
           ".validate": "newData.hasChildren(['panelId', 'panelName', 'plan', 'label', 'price', 'key', 'date'])",
           "price": { ".validate": "newData.isNumber() && newData.val() > 0" }
@@ -73,7 +73,7 @@
 
     "panels": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$panelId": {
         ".validate": "newData.hasChildren(['name', 'description', 'category', 'plans'])",
         "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 100" },
@@ -91,19 +91,19 @@
 
     "categories": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
     },
 
     "promotions": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "coupons": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$code": {
-        ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+        ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         "usageCount": {
           ".write": "auth != null",
           ".validate": "newData.val() === data.val() + 1"
@@ -112,7 +112,7 @@
     },
 
     "gateway_payments": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$orderId": {
         ".write": "auth != null",
         ".read": "auth != null",
@@ -120,14 +120,14 @@
         "uid": { ".validate": "newData.val() === auth.uid" },
         "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
         "status": {
-          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
           ".validate": "newData.val().matches(/^(pending|completed|approved|failed)$/)"
         }
       }
     },
 
     "manual_deposits": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$txId": {
         ".write": "auth != null",
         ".read": "auth != null",
@@ -136,14 +136,14 @@
         "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
         "utr": { ".validate": "newData.isString() && newData.val().length > 0" },
         "status": {
-          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
           ".validate": "newData.val().matches(/^(pending|completed|approved|failed)$/)"
         }
       }
     },
 
     "crypto_deposits": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$txId": {
         ".write": "auth != null",
         ".read": "auth != null",
@@ -151,14 +151,14 @@
         "uid": { ".validate": "newData.val() === auth.uid" },
         "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
         "status": {
-          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
           ".validate": "newData.val().matches(/^(pending|approved|failed)$/)"
         }
       }
     },
 
     "settings": {
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "branding": { ".read": true },
       "payment": { ".read": "auth != null" },
       "zap": { ".read": "auth != null" }
@@ -166,29 +166,29 @@
 
     "payment_config": {
       ".read": "auth != null",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "zap_config": {
       ".read": "auth != null",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "deposit_settings": {
       ".read": "auth != null",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "notifications": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+        ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
       }
     },
 
     "referrals": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$referrerUid": {
         ".read": "$referrerUid === auth.uid",
         ".write": "auth != null"
@@ -196,7 +196,7 @@
     },
 
     "hwid_resets": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
@@ -208,7 +208,7 @@
     },
 
     "contact_messages": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$msgId": {
         ".write": "auth != null",
         ".read": false,
@@ -221,16 +221,16 @@
 
     "branding": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "store_config": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "tickets": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "auth != null",
@@ -238,7 +238,7 @@
           ".validate": "newData.hasChildren(['subject', 'message', 'category', 'status', 'timestamp', 'uid'])",
           "uid": { ".validate": "newData.val() === auth.uid" },
           "status": {
-            ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+            ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
             ".validate": "newData.val().matches(/^(open|closed|resolved)$/)"
           },
           "subject": { ".validate": "newData.isString() && newData.val().length > 0" },
@@ -248,25 +248,25 @@
     },
 
     "audit_log": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
     },
 
     "announcement_history": {
-      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
     },
 
     "global_alerts": {
       "promotions": {
         ".read": true,
-        ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+        ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'"
       }
     },
 
     "support_links": {
       ".read": true,
-      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+      ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
     },
 
     "$other": {

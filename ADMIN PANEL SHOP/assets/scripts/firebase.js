@@ -15,7 +15,7 @@ const app = initializeApp({
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-const ADMIN_UID = "PmgO7qHYasOdgQfkmai0YnpQIWB3";
+const ADMIN_UID = "rOlsx6LYYYXPYLkueN2UmviaB8O2";
 
 export async function isAdmin(uid) {
     if (uid === ADMIN_UID) return true;
