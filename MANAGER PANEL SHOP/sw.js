@@ -1,4 +1,4 @@
-const CACHE = 'nexus-manager-v5';
+const CACHE = 'nexus-manager-v6';
 const STATIC_ASSETS = [
   'pages/index/index.html', 'pages/dashboard/dashboard.html', 'pages/users/users.html', 'pages/purchases/purchases.html',
   'pages/manual/manual.html', 'pages/crypto/crypto.html',
