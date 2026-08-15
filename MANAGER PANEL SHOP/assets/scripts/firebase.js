@@ -3,13 +3,13 @@ import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, setPe
 import { getDatabase, ref, onValue, get, push, set, update, remove, runTransaction, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
 const app = initializeApp({
-    apiKey: "AIzaSyD9hHDcTFh0a-3eSsXJ-sdD4_U78bsagYA",
-    authDomain: "prince-hacks-test.firebaseapp.com",
-    databaseURL: "https://prince-hacks-test-default-rtdb.firebaseio.com",
-    projectId: "prince-hacks-test",
-    storageBucket: "prince-hacks-test.firebasestorage.app",
-    messagingSenderId: "1070897490445",
-    appId: "1:1070897490445:web:17b1cb1461fd76bb888344"
+    apiKey: "AIzaSyAl1VxbJ4kV-JIeKNrzvE8ypDcYQawAR44",
+    authDomain: "prince-1a57b.firebaseapp.com",
+    databaseURL: "https://prince-1a57b-default-rtdb.firebaseio.com",
+    projectId: "prince-1a57b",
+    storageBucket: "prince-1a57b.firebasestorage.app",
+    messagingSenderId: "239746744940",
+    appId: "1:239746744940:web:3e5dc237ee70857a8f0e49"
 });
 
 const auth = getAuth(app);
