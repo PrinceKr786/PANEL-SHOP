@@ -79,11 +79,11 @@ function a() {
     const e = document.getElementById("couponLoader");
     e && e.classList.add("hidden")
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
     assertAdmin(() => {
         e(), document.getElementById("btnAddCoupon")?.addEventListener("click", t)
     })
-}), window.toggleCoupon = async (t, c) => {
+} __boot(); })), window.toggleCoupon = async (t, c) => {
     n();
     try {
         await update(ref(db, `coupons/${t}`), {

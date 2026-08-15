@@ -38,11 +38,11 @@ function m() {
 }
 r && n && r.addEventListener("click", () => {
     "password" === n.type ? (n.type = "text", r.innerHTML = '<i class="fas fa-eye-slash" style="color: #00f0ff;"></i>') : (n.type = "password", r.innerHTML = '<i class="fas fa-eye"></i>')
-}), document.addEventListener("DOMContentLoaded", () => {
+}), document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
     const e = localStorage.getItem("nexus_manager_id"),
         s = localStorage.getItem("nexus_manager_pass");
     e && (t.value = e, n.value = s || "", a.checked = !0)
-}), e && e.addEventListener("submit", async e => {
+} __boot(); })), e && e.addEventListener("submit", async e => {
     e.preventDefault();
     const r = t.value.trim(),
         c = n.value;

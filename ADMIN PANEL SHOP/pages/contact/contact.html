@@ -45,10 +45,11 @@
     <script type="module">
         import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
         import { markSeen } from '../../assets/scripts/badges.js';
-        document.addEventListener('DOMContentLoaded', () => {
+        const init = () => {
             loadSidebar();
             markSeen('tickets');
-        });
+        };
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
     </script>
     <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
 </body>

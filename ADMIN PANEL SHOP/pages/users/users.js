@@ -95,14 +95,14 @@ function s() {
     const e = document.getElementById("usersLoader");
     e && e.classList.add("hidden")
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
     assertAdmin(() => e()), document.getElementById("searchUsersInput")?.addEventListener("input", e => {
         const t = e.target.value.toLowerCase();
         document.querySelectorAll("#usersTbody tr").forEach(e => {
             e.style.display = e.innerText.toLowerCase().includes(t) ? "" : "none"
         })
     }), document.getElementById("btnSaveBalance")?.addEventListener("click", t)
-}), window.toggleBan = async (t, d) => {
+} __boot(); })), window.toggleBan = async (t, d) => {
     a();
     try {
         await update(ref(db, `users/${t}`), {

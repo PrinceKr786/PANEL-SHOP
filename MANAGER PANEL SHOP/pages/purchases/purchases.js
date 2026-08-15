@@ -73,11 +73,11 @@ async function i() {
         }()
 }
 window.initPurchases = i;
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
     assertManager(() => i()), document.getElementById("searchPurchasesInput")?.addEventListener("input", e => {
         const t = e.target.value.toLowerCase();
         document.querySelectorAll("#purchasesTbody tr").forEach(e => {
             e.style.display = e.innerText.toLowerCase().includes(t) ? "" : "none"
         })
     })
-});
+} __boot(); }));

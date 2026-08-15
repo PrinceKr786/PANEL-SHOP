@@ -23,7 +23,7 @@ function e(e, t = "success") {
         n.style.opacity = "0", n.style.transform = "translateX(40px)", setTimeout(() => n.remove(), 400)
     }, 3e3)
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => (function(){ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",__boot);return;} function __boot(){
     assertManager(() => {
         document.getElementById("btnAddCategory")?.addEventListener("click", () => window.addCategory()), document.getElementById("catNameInput")?.addEventListener("keydown", e => {
                 "Enter" === e.key && window.addCategory()
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
             }()
     })
-}), window.addCategory = async function() {
+} __boot(); })), window.addCategory = async function() {
     const t = document.getElementById("catNameInput"),
         a = t.value.trim();
     if (!a) return e("Enter a category name", "error");

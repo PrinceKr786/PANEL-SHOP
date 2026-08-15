@@ -295,6 +295,7 @@
     }
 </style>
 
+<script src="../../assets/scripts/navigator.js"></script>
 <script>
 (async function() {
     const { auth, signOut } = await import('../../assets/scripts/firebase.js');
@@ -303,9 +304,7 @@
 
     const sidebar = document.getElementById('nexusSidebar');
     const overlay = document.getElementById('sidebar-overlay');
-    const mobileBtn = document.getElementById('mobileMenuBtn');
     const closeBtn = document.getElementById('mobileSidebarClose');
-    const themeBtn = document.getElementById('sidebarThemeToggle');
     const logoutBtn = document.getElementById('sidebarLogoutBtn');
 
     function openSidebar() {
@@ -318,20 +317,30 @@
         if (overlay) overlay.classList.remove('open');
     }
 
-    if (mobileBtn) mobileBtn.addEventListener('click', openSidebar);
+    function bindHeader() {
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const themeBtn = document.getElementById('sidebarThemeToggle');
+        if (mobileBtn && !mobileBtn._nexusBound) {
+            mobileBtn._nexusBound = true;
+            mobileBtn.addEventListener('click', openSidebar);
+        }
+        if (themeBtn && !themeBtn._nexusBound) {
+            themeBtn._nexusBound = true;
+            const applyTheme = (theme) => {
+                document.body.classList.toggle('light-theme', theme === 'light');
+                themeBtn.innerHTML = theme === 'light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem('nexusDashboardTheme', theme);
+            };
+            applyTheme(localStorage.getItem('nexusDashboardTheme') === 'light' ? 'light' : 'dark');
+            themeBtn.addEventListener('click', () => applyTheme(document.body.classList.contains('light-theme') ? 'dark' : 'light'));
+        }
+    }
+    document.addEventListener('nexusSidebarRebind', bindHeader);
+    bindHeader();
+
     if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
     if (overlay) overlay.addEventListener('click', closeSidebar);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
-
-    if (themeBtn) {
-        const applyTheme = (theme) => {
-            document.body.classList.toggle('light-theme', theme === 'light');
-            themeBtn.innerHTML = theme === 'light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('nexusDashboardTheme', theme);
-        };
-        applyTheme(localStorage.getItem('nexusDashboardTheme') === 'light' ? 'light' : 'dark');
-        themeBtn.addEventListener('click', () => applyTheme(document.body.classList.contains('light-theme') ? 'dark' : 'light'));
-    }
 
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
