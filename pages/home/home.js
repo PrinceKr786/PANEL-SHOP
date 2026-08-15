@@ -53,7 +53,7 @@ function __homeInit() {
     }(),
     function() {
         const e = document.getElementById("featuredPanelContainer");
-        e && onValue(ref(db, "panels"), t => {
+        function __panelsRender(t) {
             if (e.innerHTML = "", !t.exists()) return void(e.innerHTML = '\n                    <div class="snap-center shrink-0 w-full h-36 bg-gradient-to-br from-[#0a0c12] to-[#05070a] border border-white/5 rounded-2xl flex flex-col justify-center items-center">\n                        <i class="fas fa-box-open text-2xl text-gray-600 mb-2"></i>\n                        <p class="text-[9px] font-mono tracking-widest text-gray-500">No panels yet</p>\n                    </div>');
             let n = [];
             if (t.forEach(e => {
@@ -71,7 +71,7 @@ function __homeInit() {
                     i = t.logo ? `<img src="${t.logo}" class="fp-logo" loading="lazy" decoding="async">` : '<div class="fp-logo-placeholder"><i class="fas fa-cube"></i></div>';
                 e.innerHTML += `\n                    <div class="snap-center shrink-0 w-[75%] md:w-[30%] featured-panel-card" onclick="window.location.href='../shop/shop.html'" style="animation-delay:${.08*n}s">\n                        <div class="fp-top">\n                            ${i}\n                            <div class="fp-info">\n                                <p class="fp-name">${t.name||"Panel"}</p>\n                                <p class="fp-category">${t.category||"General"}</p>\n                            </div>\n                            <span class="fp-badge">${s.length} Plans</span>\n                        </div>\n                        <div class="fp-bottom">\n                            <span class="fp-price-label">Starting from</span>\n                            <span class="fp-price">${r}</span>\n                        </div>\n                    </div>`
             });
-            let s = setInterval(() => {
+            clearInterval(e.__panelScroll), e.__panelScroll = setInterval(() => {
                 if (e.isConnected) {
                     if (e.scrollWidth > e.clientWidth)
                         if (e.scrollLeft + e.clientWidth >= e.scrollWidth - 10) e.scrollTo({
@@ -85,20 +85,24 @@ function __homeInit() {
                                 behavior: "smooth"
                             })
                         }
-                } else clearInterval(s)
+                } else clearInterval(e.__panelScroll)
             }, 4e3)
-        })
+        }
+        e && (onValue(ref(db, "panels"), t => { NX.set("panels", t.val()), __panelsRender(t) }), __panelsRender(NX.snap(NX.get("panels"))))
     }(),
     function() {
         const e = document.getElementById("announcementContainer");
-        e && get(ref(db, "settings/branding")).then(t => {
+        function __brandRender(n) {
+            n && n.announcement && (e.style.display = "", e.querySelector("#announcementText").textContent = n.announcement)
+        }
+        e && (__brandRender(NX.get("branding")), get(ref(db, "settings/branding")).then(t => {
             const n = t.val() || {};
-            n.announcement && (e.style.display = "", e.querySelector("#announcementText").textContent = n.announcement)
-        }).catch(() => {})
+            NX.set("branding", n), __brandRender(n)
+        }).catch(() => {}))
     }(),
     function() {
         const e = document.getElementById("promotionsContainer");
-        e && onValue(ref(db, "promotions"), t => {
+        function __promoRender(t) {
             e.innerHTML = "";
             let n = [];
             if (t.exists() && t.forEach(e => {
@@ -119,7 +123,7 @@ function __homeInit() {
             }), s += "</div>", e.innerHTML = s, setTimeout(() => {
                 const e = document.getElementById("promoScrollContainer");
                 if (!e) return;
-                let t = setInterval(() => {
+                clearInterval(e.__promoScroll), e.__promoScroll = setInterval(() => {
                     if (e.isConnected) {
                         if (e.scrollWidth > e.clientWidth)
                             if (e.scrollLeft + e.clientWidth >= e.scrollWidth - 10) e.scrollTo({
@@ -133,10 +137,11 @@ function __homeInit() {
                                     behavior: "smooth"
                                 })
                             }
-                    } else clearInterval(t)
+                    } else clearInterval(e.__promoScroll)
                 }, 4e3)
             }, 500)
-        })
+        }
+        e && (onValue(ref(db, "promotions"), t => { NX.set("promotions", t.val()), __promoRender(t) }), __promoRender(NX.snap(NX.get("promotions"))))
     }(), onAuthStateChanged(auth, async t => {
         if (!t) return document.getElementById("homeUserName").innerText = "Guest", document.getElementById("homeUserEmail").innerText = "Login to access your dashboard", document.getElementById("homeAvatar").innerText = "G", document.getElementById("homeBalance").innerText = window.formatPriceShort ? window.formatPriceShort(0) : "0.00", document.getElementById("statPurchases").innerText = "-", document.getElementById("statSpent").innerText = "-", document.getElementById("statKeys").innerText = "-", document.getElementById("statMemberSince").innerText = "-", void(document.getElementById("recentPurchasesContainer").innerHTML = '\n                <div class="premium-glass-card p-8 flex flex-col items-center justify-center opacity-60">\n                    <div class="w-14 h-14 rounded-2xl bg-rose-500/5 border border-rose-500/10 flex items-center justify-center text-rose-500/30 text-2xl mb-3">\n                        <i class="fas fa-lock"></i>\n                    </div>\n                    <p class="text-[10px] font-mono tracking-widest text-gray-500">Login to see your purchases</p>\n                    <button onclick="window.location.href=\'../index/index.html?tab=login\'" class="mt-3 px-5 py-2.5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-xl font-black text-[10px] uppercase tracking-wider text-white shadow-[0_0_15px rgba(225,29,72,0.4)] cursor-pointer">LOGIN NOW</button>\n                </div>');
         const n = t.uid,

@@ -21,8 +21,11 @@ const o = document.getElementById("storeProductsGrid"),
     l = document.getElementById("storeLoader");
 
 function d() {
-    o && onValue(ref(db, "panels"), t => {
-        e = [], t.exists() && t.forEach(t => {
+    o && (onValue(ref(db, "panels"), t => { NX.set("panels", t.val()), __shopPanels(t) }), __shopPanels(NX.snap(NX.get("panels"))))
+}
+
+function __shopPanels(t) {
+    e = [], t.exists() && t.forEach(t => {
                 const n = {
                     id: t.key,
                     ...t.val()
@@ -40,7 +43,6 @@ function d() {
                     n += `<button class="category-chip" style="animation-delay:${(.04*a).toFixed(2)}s" onclick="filterStore('${e.replace(/'/g,"\\'")}')" data-category="${e.replace(/'/g,"\\'")}"><i class="fas fa-tag"></i> ${e}<span class="chip-count">${t[e]}</span></button>`
                 }), c.innerHTML = n
             }(), u()
-    })
 }
 
 function u() {
