@@ -562,7 +562,7 @@
     }
 
     .bottom-nav.hidden {
-        transform: translate3d(-50%, calc(100% + 30px), 0);
+        transform: translate3d(-50%, calc(100% + 55px), 0);
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
     }
@@ -602,17 +602,6 @@
             if (navigator.vibrate) navigator.vibrate(20);
         });
     });
-
-    var prev = 0, hidden = !1, bar = document.getElementById("bottomNav"), navLabel = document.getElementById("navPageLabel");
-    window.addEventListener("scroll", function() {
-        var c = window.pageYOffset, hide = c > prev && c > 120;
-        if (hide !== hidden) {
-            bar.classList.toggle("hidden", hide);
-            if (navLabel) navLabel.classList.toggle("hidden", hide);
-            hidden = hide
-        }
-        prev = c;
-    }, { passive: !0 });
 
     window.updateCartBadge = function(n) {
         var b = document.getElementById("cartBadge");
