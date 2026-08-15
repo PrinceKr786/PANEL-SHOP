@@ -1,4 +1,4 @@
-const CACHE = 'nexus-store-v15';
+const CACHE = 'nexus-store-v16';
 
 const PRECACHE = [
   'index.html',

@@ -41,6 +41,23 @@ async function e() {
     s()
 }
 window.initUsersTable = e;
+async function backfillRefcodes() {
+    if (sessionStorage.getItem("refcodes_backfilled")) return;
+    try {
+        const usersSnap = await get(query(ref(db, "users"), limitToLast(1000)));
+        if (usersSnap.exists()) {
+            const updates = {};
+            usersSnap.forEach(u => {
+                const uname = (u.val().username || "").toLowerCase();
+                if (uname && uname.length >= 3) updates["refcodes/" + uname] = u.key;
+            });
+            if (Object.keys(updates).length) await update(ref(db), updates);
+        }
+        sessionStorage.setItem("refcodes_backfilled", "1");
+    } catch (e) {
+        console.error("refcodes backfill failed", e);
+    }
+}
 async function t() {
     const t = document.getElementById("editBalUid").value,
         d = parseFloat(document.getElementById("editBalCurrent").value),
@@ -96,7 +113,7 @@ function s() {
     e && e.classList.add("hidden")
 }
 document.addEventListener("DOMContentLoaded", () => {
-    assertAdmin(() => e()), document.getElementById("searchUsersInput")?.addEventListener("input", e => {
+    assertAdmin(() => { e(); backfillRefcodes(); }), document.getElementById("searchUsersInput")?.addEventListener("input", e => {
         const t = e.target.value.toLowerCase();
         document.querySelectorAll("#usersTbody tr").forEach(e => {
             e.style.display = e.innerText.toLowerCase().includes(t) ? "" : "none"

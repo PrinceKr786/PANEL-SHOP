@@ -783,7 +783,7 @@
         @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
     <script type="module">
-        import { auth, db, ref, get, onValue, update, runTransaction, onAuthStateChanged } from "./../../assets/scripts/core/firebase.js";
+        import { auth, db, ref, get, onValue, update, runTransaction, set, onAuthStateChanged } from "./../../assets/scripts/core/firebase.js";
         function showToast(msg, type = 'success') {
             const c = document.getElementById('toastContainer');
             const t = document.createElement('div');
@@ -811,11 +811,16 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
+                const userSnap2 = await get(ref(db, `users/${currentUid}`));
+                if (userSnap2.exists() && userSnap2.val().status === 'banned') { showToast('Account is banned', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Claim'; return; }
                 const snap = await get(ref(db, `users/${currentUid}/referralClaimable`));
                 const claimable = parseFloat(snap.exists() ? snap.val() : 0);
                 if (claimable <= 0) { showToast('Nothing to claim', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Claim'; return; }
-                await runTransaction(ref(db, `users/${currentUid}/balance`), (bal) => (bal || 0) + claimable);
-                await update(ref(db, `users/${currentUid}`), { referralClaimable: 0 });
+                await runTransaction(ref(db, `users/${currentUid}`), (u) => {
+                    if (u === null) return u;
+                    const cl = parseFloat(u.referralClaimable || 0);
+                    return { ...u, balance: (u.balance || 0) + cl, referralClaimable: 0 };
+                });
                 document.getElementById('claimableAmount').innerText = window.formatPrice ? window.formatPrice(0) : '0.00';
                 showToast((window.formatPrice ? window.formatPrice(claimable) : '₹' + claimable.toFixed(2)) + ' claimed to wallet!');
             } catch (e) { showToast('Claim failed', 'error'); }
@@ -831,6 +836,7 @@ if (!user) return window.location.href = "../../pages/index/index.html?tab=login
                 const userSnap = await get(ref(db, 'users/' + uid));
                 const userData = userSnap.exists() ? userSnap.val() : {};
                 const username = userData.username || uid.substring(0, 8);
+                try { await set(ref(db, 'refcodes/' + username.toLowerCase()), uid); } catch (e) {}
                 const baseUrl = window.location.origin + window.location.pathname.replace(/\/components\/(menubar|pages)\/.*$/, '/');
                 const link = baseUrl + 'pages/index/index.html?ref=' + encodeURIComponent(username);
                 document.getElementById('referralLink').innerText = link;
