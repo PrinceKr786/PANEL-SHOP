@@ -5,9 +5,9 @@
 /* --- BACKGROUND --- */
 @keyframes bgFadeIn { from { opacity:0; } to { opacity:1; } }
 .premium-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -100; background-color: #030305; overflow: hidden; animation: bgFadeIn 1.2s ease-out forwards; }
-.bg-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.35; animation: orbMove 15s infinite alternate ease-in-out; }
-.bg-orb-1 { width: 50vw; height: 50vw; background: #e11d48; top: -15%; left: -15%; animation-duration: 22s; animation-name: orbMove, orbPulse1; }
-.bg-orb-2 { width: 60vw; height: 60vw; background: #9333ea; bottom: -20%; right: -15%; animation-duration: 28s, 7s; animation-direction: alternate-reverse, normal; animation-name: orbMove, orbPulse2; }
+.bg-orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.35; animation: orbMove 15s infinite alternate ease-in-out; }
+.bg-orb-1 { width: 40vw; height: 40vw; background: #e11d48; top: -15%; left: -15%; animation-duration: 22s; animation-name: orbMove, orbPulse1; }
+.bg-orb-2 { width: 45vw; height: 45vw; background: #9333ea; bottom: -20%; right: -15%; animation-duration: 28s, 7s; animation-direction: alternate-reverse, normal; animation-name: orbMove, orbPulse2; }
 .bg-orb-3 { width: 45vw; height: 45vw; background: #00f0ff; top: 30%; left: 20%; animation-duration: 35s, 9s; mix-blend-mode: screen; animation-name: orbMove, orbPulse3; }
 .bg-grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -99; animation: gridPan 30s linear infinite; }
 @keyframes orbMove { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(15vw,15vh) scale(1.1); } 66% { transform: translate(-10vw,20vh) scale(0.9); } 100% { transform: translate(10vw,-10vh) scale(1.2); } }
@@ -329,3 +329,7 @@
 .home-toast.success i { color: #00ff66; }
 .home-toast.error i { color: #ff2a5f; }
 @keyframes toastSlideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .bg-orb, .bg-grid-overlay { animation: none; }
+}

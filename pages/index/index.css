@@ -121,7 +121,7 @@ height:320px;
 
 border-radius:50%;
 
-filter:blur(120px);
+filter:blur(70px);
 
 opacity:.18;
 
@@ -1440,3 +1440,6 @@ font-size:38px;
 .btn-primary:disabled { opacity:0.4; cursor:not-allowed; transform:none !important; }
 
 @media (max-width:480px) { .modal { padding:24px; } }
+@media (prefers-reduced-motion: reduce) {
+    .background-glow { animation: none; }
+}

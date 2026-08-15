@@ -18,14 +18,14 @@
 .bg-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
+    filter: blur(70px);
     opacity: 0.25;
     animation: orbMoveWallet 15s infinite alternate ease-in-out;
 }
 
 /* Orb 1: Emerald Green */
 .bg-orb-1 {
-    width: 55vw; height: 55vw;
+    width: 42vw; height: 42vw;
     background: #10b981; 
     top: -10%; left: -10%;
     animation-duration: 25s;
@@ -34,7 +34,7 @@
 
 /* Orb 2: Teal / Cyan */
 .bg-orb-2 {
-    width: 60vw; height: 60vw;
+    width: 45vw; height: 45vw;
     background: #0ea5e9; 
     bottom: -20%; right: -10%;
     animation-duration: 30s, 7s;
@@ -195,3 +195,7 @@ input[type="number"]:focus, input[type="text"]:focus {
 
 @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .bg-orb, .bg-grid-overlay { animation: none; }
+}

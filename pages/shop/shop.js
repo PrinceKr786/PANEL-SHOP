@@ -133,20 +133,13 @@ function __shopInit() {
                 t.beginPath(), t.arc(this.x, this.y, this.size, 0, 2 * Math.PI), t.fillStyle = `rgba(255,255,255,${this.opacity})`, t.fill()
             }
         }
-        const P = Math.min(120, window.innerWidth < 768 ? 40 : 120); for (let e = 0; e < P; e++) s.push(new o);
+        const Q = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+            P = Q ? 0 : Math.min(45, window.innerWidth < 768 ? 18 : 45);
+        for (let e = 0; e < P; e++) s.push(new o);
         ! function e() {
-            t.clearRect(0, 0, n, a), s.forEach(e => {
+            requestAnimationFrame(e), !Q && !document.hidden && document.getElementById("particleCanvas") && (t.clearRect(0, 0, n, a), s.forEach(e => {
                 e.update(), e.draw()
-            });
-            for (let e = 0; e < s.length; e++)
-                for (let n = e + 1; n < s.length; n++) {
-                    const a = s[e].x - s[n].x,
-                        i = s[e].y - s[n].y,
-                        o = Math.sqrt(a * a + i * i);
-                    o < 120 && (t.beginPath(), t.moveTo(s[e].x, s[e].y), t.lineTo(s[n].x, s[n].y), t.strokeStyle = `rgba(225,29,72,${.06*(1-o/120)})`, t.lineWidth = .5, t.stroke())
-                }
-            if (!document.getElementById("particleCanvas")) return;
-            requestAnimationFrame(e)
+            }))
         }()
     }(),
     function() {

@@ -768,9 +768,11 @@
     </script>
     <style>
         .premium-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -100; background-color: #030305; overflow: hidden; }
-        .bg-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; animation: orbMove 18s infinite alternate ease-in-out; }
-        .bg-orb-1 { width: 50vw; height: 50vw; top: -15%; left: -15%; animation-duration: 22s; animation-name: orbMove, orbPulse1; }
-        .bg-orb-2 { width: 60vw; height: 60vw; bottom: -20%; right: -15%; animation-duration: 28s, 7s; animation-direction: alternate-reverse, normal; animation-name: orbMove, orbPulse2; }
+        .bg-orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.25; animation: orbMove 18s infinite alternate ease-in-out; }
+        .bg-orb-1 { width: 40vw; height: 40vw; top: -15%; left: -15%; animation-duration: 22s; animation-name: orbMove, orbPulse1; }
+        .bg-orb-2 { width: 45vw; height: 45vw; bottom: -20%; right: -15%; animation-duration: 28s, 7s; animation-direction: alternate-reverse, normal; animation-name: orbMove, orbPulse2; }
+        @media (prefers-reduced-motion: reduce) { .bg-orb, .bg-grid-overlay { animation: none; } }
+
         .bg-grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -99; animation: gridPan 30s linear infinite; }
         @keyframes orbMove { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(15vw,15vh) scale(1.1); } 66% { transform: translate(-10vw,20vh) scale(0.9); } 100% { transform: translate(10vw,-10vh) scale(1.2); } }
         @keyframes orbPulse1 { 0% { opacity: 0.1; transform: scale(0.8); } 50% { opacity: 0.45; transform: scale(1.3); } 100% { opacity: 0.1; transform: scale(0.8); } }
