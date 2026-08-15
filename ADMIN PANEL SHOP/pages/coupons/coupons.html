@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Admin | Coupons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/styles/base.css">
+    <link rel="stylesheet" href="coupons.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+    <div class="dash-bg-engine"><div class="dash-grid"></div><div class="dash-glow top-left"></div><div class="dash-glow bottom-right"></div></div>
+    <div id="sidebarContainer"></div>
+    <main class="main-content-wrapper">
+        <header class="dash-header glass-header"><div class="header-left"><button id="mobileMenuBtn" class="mobile-menu-toggle" type="button" aria-label="Open sidebar"><i class="fas fa-bars-staggered"></i></button><div class="page-title-box"><h1 id="page-title" class="cyber-title">Coupons</h1><div class="title-underline"></div></div></div><div class="header-right"><div class="live-status"><span class="pulse-dot"></span> <span class="status-text">SYSTEM ONLINE</span></div><button id="sidebarThemeToggle" class="sidebar-theme-toggle" type="button" aria-label="Toggle theme"><i class="fas fa-moon"></i></button><div class="admin-profile-chip"><div class="admin-avatar"><i class="fas fa-user-shield"></i></div><span id="headerAdminEmail" class="admin-email">ADMIN</span></div></div></header>
+        <div class="sections-container custom-scrollbar">
+            <section class="page-section active-section">
+                <div class="coupons-toolbar">
+                    <div class="fld-small" style="flex:1;min-width:160px;"><label>Coupon Code</label><input id="couponCode" style="text-transform:uppercase;" placeholder="e.g. SAVE50" type="text"/></div>
+                    <div class="fld-small" style="flex:1;min-width:120px;"><label>Discount (%)</label><input id="couponDiscount" type="number" min="1" max="100"/></div>
+                    <div class="fld-small" style="flex:1;min-width:140px;"><label>Max Usage</label><input id="couponMax" placeholder="Leave empty for unlimited" type="number"/></div>
+                    <button class="btn-primary" id="btnAddCoupon" style="height:46px;"><i class="fas fa-plus"></i> CREATE</button>
+                </div>
+                <div class="dash-box glass-panel">
+                    <div class="box-header">
+                        <h2><i class="fas fa-ticket-alt" style="color:#00f0ff;margin-right:8px;"></i> Managed Coupons</h2>
+                        <button class="qa-btn" style="padding:8px 16px;font-size:11px;" onclick="initCoupons()"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div style="max-height:500px;overflow-y:auto;width:100%;">
+                        <table class="data-table">
+                            <thead><tr><th>Code</th><th>Discount</th><th>Usage</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="couponsTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="couponToastContainer"></div>
+    <div id="couponLoader" class="loader-overlay hidden"><div class="spinner"></div></div>
+
+    <script type="module" src="coupons.js"></script>
+    <script type="module">
+        import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
+        document.addEventListener('DOMContentLoaded', () => loadSidebar());
+    </script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>

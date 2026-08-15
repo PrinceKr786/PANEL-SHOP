@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Admin | Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../../assets/styles/base.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+
+    <div class="dash-bg-engine">
+        <div class="dash-grid"></div>
+        <div class="dash-glow top-left"></div>
+        <div class="dash-glow bottom-right"></div>
+    </div>
+
+    <div id="sidebarContainer"></div>
+    
+
+
+    <main class="main-content-wrapper">
+        
+        <header class="dash-header glass-header">
+            <div class="header-left">
+                <button id="mobileMenuBtn" class="mobile-menu-toggle" type="button" aria-label="Open sidebar">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+                <div class="page-title-box">
+                    <h1 id="page-title" class="cyber-title">Dashboard</h1>
+                    <div class="title-underline"></div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="live-status">
+                    <span class="pulse-dot"></span> <span class="status-text">SYSTEM ONLINE</span>
+                </div>
+                <button id="sidebarThemeToggle" class="sidebar-theme-toggle" type="button" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+                <div class="admin-profile-chip">
+                    <div class="admin-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <span id="headerAdminEmail" class="admin-email">ADMIN</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="sections-container custom-scrollbar">
+            
+            <section id="sec-dashboard" class="page-section active-section">
+                
+                <div class="stats-grid">
+                    <div class="stat-card glass-panel fade-in delay-1">
+                        <div class="stat-icon icon-purple"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-info">
+                            <p>Total Revenue</p>
+                            <h3 id="statRevenue">₹0.00</h3>
+                        </div>
+                        <div class="stat-glow"></div>
+                    </div>
+                    
+                    <div class="stat-card glass-panel fade-in delay-2">
+                        <div class="stat-icon icon-blue"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <p>Total Users</p>
+                            <h3 id="statUsers">0</h3>
+                        </div>
+                        <div class="stat-glow"></div>
+                    </div>
+
+                    <div class="stat-card glass-panel fade-in delay-3">
+                        <div class="stat-icon icon-amber"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="stat-info">
+                            <p>Pending Manual</p>
+                            <h3 id="statPendingManual">0</h3>
+                        </div>
+                        <div class="stat-glow"></div>
+                    </div>
+                    
+                    <div class="stat-card glass-panel fade-in delay-4">
+                        <div class="stat-icon icon-rose"><i class="fas fa-bolt"></i></div>
+                        <div class="stat-info">
+                            <p>Pending Gateway</p>
+                            <h3 id="statPendingGateway">0</h3>
+                        </div>
+                        <div class="stat-glow"></div>
+                    </div>
+                </div>
+
+                <div class="dash-split-grid fade-in delay-5">
+                    <div class="dash-box glass-panel" style="min-height:350px;display:flex;flex-direction:column;">
+                        <div class="box-header">
+                            <h2><i class="fas fa-chart-line text-[#bc13fe] mr-2"></i> Revenue Overview <span style="font-size:13px;font-weight:400;color:#888888">(Last 7 Days)</span></h2>
+                        </div>
+                        <div style="flex:1;position:relative;width:100%;min-height:0;">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="dash-box glass-panel">
+                        <div class="box-header">
+                            <h2><i class="fas fa-clock-rotate-left text-[#00f0ff] mr-2"></i> Recent Deposits</h2>
+                            <a href="../gateway/gateway.html" style="font-size:12px;color:#00f0ff;text-decoration:none;">View All</a>
+                        </div>
+                        <div id="recentPaymentsList">
+                            <div style="padding:20px;text-align:center;color:#888888;">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="dashboard.js"></script>
+
+    <script type="module">
+        import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
+        document.addEventListener('DOMContentLoaded', () => loadSidebar());
+    </script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>

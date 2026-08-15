@@ -1,0 +1,17 @@
+# Secret - do not upload
+api.txt
+
+# Dependencies
+node_modules/
+
+# Backups / build artifacts
+backups/
+js_backup/
+_build/
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

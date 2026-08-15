@@ -1,0 +1,277 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+
+    "admins": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "$uid": { ".validate": "$uid === auth.uid" }
+    },
+
+    "managers": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "$uid": {
+        ".read": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      }
+    },
+
+    "users": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+        "balance": {
+          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "referralClaimable": {
+          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "banned": { ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'" },
+        "status": { ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)" },
+        "role": {
+          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || newData.val() === 'user'",
+          ".validate": "newData.val().matches(/^(user|manager|admin)$/)"
+        },
+        "username": { ".validate": "newData.isString() && newData.val().matches(/^[a-zA-Z0-9_-]{3,30}$/)" },
+        "name": { ".validate": "newData.isString() && newData.val().length <= 50" },
+        "email": { ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+[.][^@]+$/)" }
+      }
+    },
+
+    "transactions": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+        "$txId": {
+          ".validate": "newData.hasChildren(['type', 'amount', 'status', 'date', 'desc'])",
+          "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "status": {
+            ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+            ".validate": "newData.val().matches(/^(pending|completed|success|failed)$/)"
+          },
+          "type": { ".validate": "newData.val().matches(/^(deposit_manual|deposit_auto|deposit_gateway|deposit_crypto|purchase|refund|admin_edit)$/)" }
+        }
+      }
+    },
+
+    "purchases": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid || auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+        "$purchaseId": {
+          ".validate": "newData.hasChildren(['panelId', 'panelName', 'plan', 'label', 'price', 'key', 'date'])",
+          "price": { ".validate": "newData.isNumber() && newData.val() > 0" }
+        }
+      }
+    },
+
+    "panels": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$panelId": {
+        ".validate": "newData.hasChildren(['name', 'description', 'category', 'plans'])",
+        "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 100" },
+        "description": { ".validate": "newData.isString()" },
+        "category": { ".validate": "newData.isString()" },
+        "plans": {
+          "$planKey": {
+            ".validate": "newData.hasChildren(['name', 'price'])",
+            "price": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+            "name": { ".validate": "newData.isString() && newData.val().length > 0" }
+          }
+        }
+      }
+    },
+
+    "categories": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+    },
+
+    "promotions": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "coupons": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$code": {
+        ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+        "usageCount": {
+          ".write": "auth != null",
+          ".validate": "newData.val() === data.val() + 1"
+        }
+      }
+    },
+
+    "gateway_payments": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "$orderId": {
+        ".write": "auth != null",
+        ".read": "auth != null",
+        ".validate": "newData.hasChildren(['uid', 'amount', 'status', 'timestamp'])",
+        "uid": { ".validate": "newData.val() === auth.uid" },
+        "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+        "status": {
+          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+          ".validate": "newData.val().matches(/^(pending|completed|approved|failed)$/)"
+        }
+      }
+    },
+
+    "manual_deposits": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$txId": {
+        ".write": "auth != null",
+        ".read": "auth != null",
+        ".validate": "newData.hasChildren(['uid', 'amount', 'status', 'utr', 'timestamp'])",
+        "uid": { ".validate": "newData.val() === auth.uid" },
+        "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+        "utr": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "status": {
+          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".validate": "newData.val().matches(/^(pending|completed|approved|failed)$/)"
+        }
+      }
+    },
+
+    "crypto_deposits": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$txId": {
+        ".write": "auth != null",
+        ".read": "auth != null",
+        ".validate": "newData.hasChildren(['uid', 'email', 'amount', 'status', 'timestamp'])",
+        "uid": { ".validate": "newData.val() === auth.uid" },
+        "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+        "status": {
+          ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+          ".validate": "newData.val().matches(/^(pending|approved|failed)$/)"
+        }
+      }
+    },
+
+    "settings": {
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "branding": { ".read": true },
+      "payment": { ".read": "auth != null" },
+      "zap": { ".read": "auth != null" }
+    },
+
+    "payment_config": {
+      ".read": "auth != null",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "zap_config": {
+      ".read": "auth != null",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "deposit_settings": {
+      ".read": "auth != null",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "notifications": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+      }
+    },
+
+    "referrals": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "$referrerUid": {
+        ".read": "$referrerUid === auth.uid",
+        ".write": "auth != null"
+      }
+    },
+
+    "hwid_resets": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "$resetId": {
+          ".validate": "newData.hasChildren(['hwid', 'oldHwid', 'key', 'timestamp'])",
+          "hwid": { ".validate": "newData.isString() && newData.val().length > 0" }
+        }
+      }
+    },
+
+    "contact_messages": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$msgId": {
+        ".write": "auth != null",
+        ".read": false,
+        ".validate": "newData.hasChildren(['name', 'email', 'message', 'timestamp'])",
+        "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "email": { ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+[.][^@]+$/)" },
+        "message": { ".validate": "newData.isString() && newData.val().length > 0" }
+      }
+    },
+
+    "branding": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "store_config": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "tickets": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "auth != null",
+        "$ticketId": {
+          ".validate": "newData.hasChildren(['subject', 'message', 'category', 'status', 'timestamp', 'uid'])",
+          "uid": { ".validate": "newData.val() === auth.uid" },
+          "status": {
+            ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)",
+            ".validate": "newData.val().matches(/^(open|closed|resolved)$/)"
+          },
+          "subject": { ".validate": "newData.isString() && newData.val().length > 0" },
+          "message": { ".validate": "newData.isString() && newData.val().length > 0" }
+        }
+      }
+    },
+
+    "audit_log": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+    },
+
+    "announcement_history": {
+      ".read": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'",
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+    },
+
+    "global_alerts": {
+      "promotions": {
+        ".read": true,
+        ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3'"
+      }
+    },
+
+    "support_links": {
+      ".read": true,
+      ".write": "auth.uid === 'PmgO7qHYasOdgQfkmai0YnpQIWB3' || root.child('managers').hasChild(auth.uid)"
+    },
+
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}

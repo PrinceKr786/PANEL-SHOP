@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Manager | Categories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/styles/base.css">
+    <link rel="stylesheet" href="categories.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+    <div class="dash-bg-engine"><div class="dash-grid"></div><div class="dash-glow top-left"></div><div class="dash-glow bottom-right"></div></div>
+    <div id="sidebarContainer"></div>
+    <main class="main-content-wrapper">
+        <header class="dash-header glass-header">
+            <div class="header-left">
+                <button id="mobileMenuBtn" class="mobile-menu-toggle" type="button" aria-label="Open sidebar"><i class="fas fa-bars-staggered"></i></button>
+                <div class="page-title-box"><h1 id="page-title" class="cyber-title">Categories</h1><div class="title-underline"></div></div>
+            </div>
+            <div class="header-right">
+                <div class="live-status"><span class="pulse-dot"></span> <span class="status-text">SYSTEM ONLINE</span></div>
+                <button id="sidebarThemeToggle" class="sidebar-theme-toggle" type="button" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+                <div class="admin-profile-chip"><div class="admin-avatar"><i class="fas fa-user-shield"></i></div><span id="headerAdminEmail" class="admin-email">MANAGER</span></div>
+            </div>
+        </header>
+        <div class="sections-container custom-scrollbar">
+            <section class="page-section active-section">
+                <div class="add-panel-grid">
+                    <div class="dash-box glass-panel">
+                        <div class="box-header"><h2><i class="fas fa-tags" style="color:#bc13fe;margin-right:8px;"></i> Category Manager</h2></div>
+                        <div style="display:flex;gap:10px;margin-bottom:20px;">
+                            <div class="cat-input-wrap">
+                                <input id="catNameInput" class="form-input" placeholder="Enter category name..." maxlength="30">
+                                <div class="input-glow"></div>
+                            </div>
+                            <button class="qa-btn" id="btnAddCategory" style="padding:12px 24px;white-space:nowrap;background:linear-gradient(135deg,rgba(188,19,254,0.2),rgba(0,240,255,0.1));border-color:rgba(188,19,254,0.3);"><i class="fas fa-plus"></i> ADD</button>
+                        </div>
+                        <div id="catsListContainer">
+                            <div style="text-align:center;padding:40px;color:#888;font-size:13px;"><i class="fas fa-spinner fa-spin"></i> Loading categories...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="panelToastContainer"></div>
+    <div id="panelLoader" class="loader-overlay hidden"><div class="spinner"></div></div>
+
+    <script type="module" src="categories.js"></script>
+    <script type="module">
+        import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
+        document.addEventListener('DOMContentLoaded', () => loadSidebar());
+    </script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>

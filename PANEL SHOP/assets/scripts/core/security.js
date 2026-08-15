@@ -1,0 +1,1 @@
+document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.shiftKey&&("I"===e.key||"J"===e.key)||e.ctrlKey&&"U"===e.key)return e.preventDefault(),!1}),document.addEventListener("dragstart",e=>e.preventDefault()),document.addEventListener("selectstart",e=>{"INPUT"!==e.target.tagName&&"TEXTAREA"!==e.target.tagName&&e.preventDefault()});

@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Nexus Core | Helpdesk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../../assets/scripts/core/security.js"></script>
+    <script src="../../assets/scripts/utils/language.js"></script>
+</head>
+<body class="text-gray-300 font-sans overflow-x-hidden selection:bg-blue-600 selection:text-white  relative">
+    <div class="premium-bg-container">
+        <div class="bg-orb bg-orb-1" style="background:#2563eb;"></div>
+        <div class="bg-orb bg-orb-2" style="background:#0ea5e9;"></div>
+        <div class="bg-grid-overlay"></div>
+    </div>
+    <nav id="nexusHeaderMenubar" class="nexus-header-container">
+    <div class="header-brand-box" onclick="window.location.href='../../pages/home/home.html'">
+        <div class="header-icon-glow"><i class="fas fa-biohazard"></i></div>
+        <div class="header-titles">
+            <h1 class="header-main-title">PANEL</h1>
+        </div>
+    </div>
+    <div class="header-actions-box">
+        <div class="auth-ui-logged-in" style="display:none">
+            <div class="header-wallet-btn" onclick="window.location.href='../../pages/wallet/wallet.html'">
+                <div class="wallet-icon-box"><i class="fas fa-wallet"></i></div>
+                <div class="wallet-amount-box">
+                    <span id="headerLiveBalance" class="balance-digits" data-inr="0">₹0.00</span>
+                </div>
+            </div>
+            <div class="header-notif-wrap">
+                <button class="header-notif-btn" onclick="window.openNotificationPopup()" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span id="notifBadge" class="notif-badge" style="display:none">0</span>
+                </button>
+            </div>
+            <button id="headerMenuToggleBtn" class="header-menu-btn" onclick="toggleNexusMenu()">
+                <i class="fas fa-bars-staggered pointer-events-none"></i>
+            </button>
+        </div>
+        <div class="auth-ui-logged-out" style="display:none">
+            <button class="header-login-btn" onclick="window.location.href='../../pages/index/index.html?tab=login'"><i class="fas fa-sign-in-alt"></i> LOGIN</button>
+            <button class="header-register-btn" onclick="window.location.href='../../pages/index/index.html?tab=register'"><i class="fas fa-user-plus"></i> REGISTER</button>
+        </div>
+    </div>
+</nav>
+<style>
+    .nexus-header-container { padding: 12px 20px; position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; width: 100%; background: rgba(10, 12, 18, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-bottom: 1px solid rgba(168, 85, 247, 0.2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 -1px 0 rgba(255,255,255,0.05); transition: all 0.3s ease; }
+    .header-brand-box { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.3s ease; }
+    .header-brand-box:active { transform: scale(0.95); }
+    .header-icon-glow { font-size: 26px; color: #a855f7; filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.9)); animation: pulseGlow 2s infinite alternate; }
+    @keyframes pulseGlow { 0% { filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)); } 100% { filter: drop-shadow(0 0 16px rgba(168, 85, 247, 1)); } }
+    .header-main-title { font-size: 20px; font-weight: 900; color: white; letter-spacing: -0.5px; line-height: 1; }
+    .header-sub-title { font-size: 8px; letter-spacing: 3px; color: #64748b; font-weight: 800; text-transform: uppercase; display: block; margin-top: 2px; }
+    .header-actions-box { display: flex; align-items: center; gap: 15px; }
+    .header-wallet-btn { display: flex; align-items: center; background: linear-gradient(90deg, rgba(168, 85, 247, 0.15) 0%, rgba(126, 34, 206, 0.05) 100%); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 30px; padding: 4px 12px 4px 4px; cursor: pointer; box-shadow: 0 0 20px rgba(168, 85, 247, 0.2); transition: all 0.3s ease; max-width: 180px; }
+    .header-wallet-btn:hover { background: rgba(168, 85, 247, 0.25); box-shadow: 0 0 25px rgba(168, 85, 247, 0.4); transform: translateY(-1px); }
+    .wallet-icon-box { background: #a855f7; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; margin-right: 8px; box-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+    .wallet-amount-box { display: flex; align-items: baseline; min-width: 0; overflow: hidden; }
+    .balance-digits { font-size: 13px; color: white; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+    .header-menu-btn { background: transparent; border: none; color: #cbd5e1; font-size: 24px; cursor: pointer; transition: all 0.3s ease; padding: 5px; }
+    .header-menu-btn:hover { color: white; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    .header-menu-btn:active { transform: scale(0.85); }
+    .auth-ui-logged-in, .auth-ui-logged-out { display: flex; align-items: center; gap: 10px; }
+    .header-login-btn, .header-register-btn { padding: 8px 14px; border-radius: 30px; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s ease; border: none; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .header-login-btn { background: transparent; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); }
+    .header-login-btn:hover { background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(168,85,247,0.4); }
+    .header-register-btn { background: linear-gradient(90deg, #a855f7, #7c3aed); color: #fff; box-shadow: 0 0 15px rgba(168,85,247,0.3); }
+    .header-register-btn:hover { box-shadow: 0 0 25px rgba(168,85,247,0.6); transform: translateY(-1px); }
+    .header-notif-wrap { position:relative; }
+    .header-notif-btn { background:transparent; border:none; color:#cbd5e1; font-size:20px; cursor:pointer; padding:5px; position:relative; transition:all 0.3s ease; }
+    .header-notif-btn:hover { color:#fff; text-shadow:0 0 10px rgba(255,255,255,0.5); }
+    .notif-badge { position:absolute; top:0; right:0; background:#ff2a5f; color:#fff; font-size:7px; font-weight:900; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 0 8px rgba(255,42,95,0.6); }
+</style>
+
+<script>
+    window.notifPopupOpen = false;
+    window.openNotificationPopup = function() {
+        const container = document.getElementById('notification-container');
+        if (!container) return;
+        if (window.notifPopupOpen) {
+            container.style.display = 'none';
+            window.notifPopupOpen = false;
+            return;
+        }
+        container.style.display = '';
+        window.notifPopupOpen = true;
+        if (window.refreshNotifPopup) window.refreshNotifPopup();
+    };
+</script>
+<script type="module">
+    import { auth, db, ref, onValue, get, onAuthStateChanged } from "../../assets/scripts/core/firebase.js";
+    onAuthStateChanged(auth, (user) => {
+        const li = document.querySelector('.auth-ui-logged-in');
+        const lo = document.querySelector('.auth-ui-logged-out');
+        if (user) {
+            if (li) li.style.display = 'flex';
+            if (lo) lo.style.display = 'none';
+            const userRef = ref(db, `users/${user.uid}`);
+            onValue(userRef, (snap) => {
+                if(snap.exists()) {
+                    const el = document.getElementById('headerLiveBalance');
+                    if(el) { const b = parseFloat(snap.val().balance || 0); el.setAttribute('data-inr', b); el.textContent = window.formatPriceShort ? window.formatPriceShort(b) : '₹' + b.toFixed(2); }
+                }
+            });
+            onValue(ref(db, `notifications/${user.uid}`), async (snap) => {
+                const data = snap.val() || {};
+                const items = Object.values(data);
+                let unread = items.filter(n => !n.read).length;
+                try {
+                    const gSnap = await get(ref(db, 'global_alerts/promotions'));
+                    if (gSnap.exists()) {
+                        const seen = JSON.parse(localStorage.getItem('nexus_seen_global_' + user.uid)) || [];
+                        Object.keys(gSnap.val()).forEach(id => { if (!seen.includes(id)) unread++; });
+                    }
+                } catch(_) {}
+                try { if (localStorage.getItem('nexus_welcome_' + user.uid) === '1') unread++; } catch(_) {}
+                const badge = document.getElementById('notifBadge');
+                if (badge) { badge.textContent = unread; badge.style.display = unread > 0 ? 'flex' : 'none'; }
+            });
+        } else {
+            if (li) li.style.display = 'none';
+            if (lo) lo.style.display = 'flex';
+        }
+    });
+</script>
+
+    <main class="w-full max-w-3xl mx-auto px-4 md:px-8 py-6 space-y-6 relative z-10">
+        <div class="text-center md:text-left">
+            <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight">
+                <i class="fas fa-headset text-blue-400 mr-2 drop-shadow-[0_0_8px_rgba(37,99,235,0.6)]"></i>
+                Help <span class="text-blue-400">Desk</span>
+            </h1>
+            <p class="text-xs text-gray-500 mt-1">Get support and assistance</p>
+        </div>
+        <div id="supportCards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex flex-col gap-4" id="supportCol1">
+                <div class="premium-glass-card p-5 text-center relative overflow-hidden group cursor-pointer" id="supportWa" onclick="window.open(getLink('wa'))" style="display:none">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg mx-auto mb-3 group-hover:scale-110 transition">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider">WhatsApp</h4>
+                    <p class="text-[10px] text-gray-500 mt-1 truncate" id="supportWaLabel">Loading...</p>
+                </div>
+                <div class="premium-glass-card p-5 text-center relative overflow-hidden group cursor-pointer" id="supportEmail" onclick="window.open(getLink('email'))" style="display:none">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-lg mx-auto mb-3 group-hover:scale-110 transition">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider">Email</h4>
+                    <p class="text-[10px] text-gray-500 mt-1 truncate" id="supportEmailLabel">Loading...</p>
+                </div>
+            </div>
+            <div class="premium-glass-card p-5 text-center relative overflow-hidden group cursor-pointer" id="supportTg" onclick="window.open(getLink('tg'))" style="display:none">
+                <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 text-lg mx-auto mb-3 group-hover:scale-110 transition">
+                    <i class="fab fa-telegram-plane"></i>
+                </div>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider">Telegram</h4>
+                <p class="text-[10px] text-gray-500 mt-1 truncate" id="supportTgLabel">Loading...</p>
+            </div>
+            <div class="premium-glass-card p-5 text-center relative overflow-hidden group cursor-pointer" id="supportDc" onclick="window.open(getLink('dc'))" style="display:none">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-lg mx-auto mb-3 group-hover:scale-110 transition">
+                    <i class="fab fa-discord"></i>
+                </div>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider">Discord</h4>
+                <p class="text-[10px] text-gray-500 mt-1 truncate" id="supportDcLabel">Loading...</p>
+            </div>
+        </div>
+        <div class="premium-glass-card p-6 md:p-8 relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-lg">
+                        <i class="fas fa-circle-question"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-black text-white uppercase tracking-wider">Frequently Asked</h2>
+                        <p class="text-[10px] text-gray-500">Quick answers to common questions</p>
+                    </div>
+                </div>
+                <div class="space-y-2" id="faqContainer">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Register & Login?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Open the panel and click "Create Account". Enter your Email, Username, Password, and Referral Code (if any). After registering, log in with your email and password. Tick "Auto Login" to stay logged in even after closing the browser — you won't need to enter credentials again.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Add Money (Deposit)?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Go to Wallet → Deposit. You'll see 3 options: <b>• Auto (UPI)</b> — Enter amount, pay via UPI app, and your wallet updates instantly. <b>• Manual (QR)</b> — Scan QR code, send payment, upload screenshot, wait for manual approval (5-30 min). <b>• Crypto (USDT)</b> — Copy the wallet address, send USDT on the selected network, wait for network confirmations (10-30 min). Minimum deposit amounts are shown on the deposit page.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Buy a Product / Key?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Go to Store → browse categories → select a product. Set the quantity and click "Buy Now". Your balance must be sufficient. After purchase, the product key appears instantly on screen. You can also view all your purchased keys in My Keys section. If Auto Redeem is enabled by admin, the key is automatically delivered to your registered HWID.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Reset HWID?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Go to HWID Reset from the menu. Paste your new HWID (Hardware ID) into the field and click Update HWID. Your HWID will be updated instantly. You can only reset a limited number of times as set by the admin. Use this when you change your PC hardware or reinstall your OS.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Change Language / Theme / Currency?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Go to Settings in the menu. <b>• Language</b> — Switch between English and Hindi. The entire panel language changes instantly. <b>• Theme</b> — Toggle Light Mode on/off for a brighter interface. <b>• Currency</b> — Switch between INR (₹) and USD ($ USDT). In USD mode, all prices are calculated using the live USDT rate set by admin. Your preference is saved and remembered next time you log in.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Share & Earn (Referral)?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Go to Refer page from the menu. You'll see your unique referral link and code. Share this link with friends — when they register using your link and make their first purchase, you earn a commission (set by admin). You can track your earnings, total referrals, and claimed amount on the same page. Click "Claim" to withdraw your referral earnings to your wallet.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to View My Keys & Purchase History?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Go to My Keys from the menu. Here you can see all your purchased keys with product name, key, purchase date, and status. Use the search bar to find specific keys. Your full purchase history with amounts and dates is available on the Profile page.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>I didn't receive my key / Payment issue</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">First check your purchase history on Profile or My Keys page. If the key is missing: <b>• Auto Deposit</b> — If payment was deducted but wallet not updated, contact support with your UPI transaction ID (UTR number). <b>• Manual Deposit</b> — Wait for admin approval (5-30 min). If still pending, share your payment screenshot with support. <b>• Purchase</b> — If key not delivered despite balance deduction, share the product name and transaction time with support. Contact via WhatsApp, Email, or Telegram — links are on this page.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How to Open a Support Ticket?</span>
+                            <i class="fas fa-chevron-down text-[10px] transition"></i>
+                        </div>
+                        <div class="faq-answer">Scroll down to "Open a Ticket". Select a <b>Category</b> (Payment, Product, etc.) and <b>Priority</b>. Enter a subject (e.g., "Payment not received") and your transaction/order ID if relevant. Describe your issue in detail. Click Submit Ticket — the admin will see your full details (username, email, balance, category, priority) and respond. Set priority to <b>Urgent</b> for time-sensitive issues. For instant help, use WhatsApp or Telegram.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="premium-glass-card p-6 md:p-8 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-lg">
+                        <i class="fas fa-ticket"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-black text-white uppercase tracking-wider">Open a Ticket</h2>
+                        <p class="text-[10px] text-gray-500">Submit a support request</p>
+                    </div>
+                </div>
+                <form id="ticketForm" onsubmit="submitTicket(event)" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1.5">Category</label>
+                            <div class="cdrop">
+                                <div class="cdrop-trigger" data-for="ticketCategory">
+                                    <span class="cdrop-label">Select category</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="cdrop-menu" data-for="ticketCategory">
+                                    <div class="cdrop-item" data-value="">Select category</div>
+                                    <div class="cdrop-item" data-value="payment"><i class="fas fa-credit-card"></i> Payment / Deposit Issue</div>
+                                    <div class="cdrop-item" data-value="product"><i class="fas fa-box"></i> Product / Key Issue</div>
+                                    <div class="cdrop-item" data-value="hwid"><i class="fas fa-microchip"></i> HWID Reset Issue</div>
+                                    <div class="cdrop-item" data-value="account"><i class="fas fa-user"></i> Account Issue</div>
+                                    <div class="cdrop-item" data-value="other"><i class="fas fa-ellipsis"></i> Other</div>
+                                </div>
+                                <select id="ticketCategory" class="cdrop-native" required><option value="">Select category</option><option value="payment">Payment / Deposit Issue</option><option value="product">Product / Key Issue</option><option value="hwid">HWID Reset Issue</option><option value="account">Account Issue</option><option value="other">Other</option></select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1.5">Priority</label>
+                            <div class="cdrop">
+                                <div class="cdrop-trigger" data-for="ticketPriority">
+                                    <span class="cdrop-label">Medium</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="cdrop-menu" data-for="ticketPriority">
+                                    <div class="cdrop-item" data-value="low"><i class="fas fa-flag"></i> Low</div>
+                                    <div class="cdrop-item" data-value="medium" data-selected><i class="fas fa-flag"></i> Medium</div>
+                                    <div class="cdrop-item" data-value="high"><i class="fas fa-flag"></i> High</div>
+                                    <div class="cdrop-item" data-value="urgent"><i class="fas fa-exclamation"></i> Urgent</div>
+                                </div>
+                                <select id="ticketPriority" class="cdrop-native" required><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1.5">Subject</label>
+                        <input type="text" id="ticketSubject" class="w-full bg-black/60 border border-white/10 rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-blue-500 focus:shadow-[0_0_15px_rgba(37,99,235,0.2)] transition-all placeholder-gray-600" placeholder="Brief description of your issue" required>
+                    </div>
+                    <div>
+                        <label class="block text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1.5">Transaction / Order ID <span class="text-gray-600 font-normal normal-case">(optional)</span></label>
+                        <input type="text" id="ticketTxnId" class="w-full bg-black/60 border border-white/10 rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition-all placeholder-gray-600" placeholder="Enter UTR / Order ID if related to a payment">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1.5">Message</label>
+                        <textarea id="ticketMessage" rows="5" class="w-full bg-black/60 border border-white/10 rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-blue-500 focus:shadow-[0_0_15px_rgba(37,99,235,0.2)] transition-all placeholder-gray-600 resize-none" placeholder="Describe your issue in detail — include what happened, what you expected, and any steps to reproduce" required></textarea>
+                    </div>
+                    <button type="submit" id="ticketSubmitBtn" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-sky-500 rounded-2xl font-black text-[10px] uppercase tracking-wider text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_35px_rgba(37,99,235,0.7)] hover:translate-y-[-2px] transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Submit Ticket
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="premium-glass-card p-6 md:p-8 relative overflow-hidden" id="myTicketsSection" style="display:none;">
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg">
+                        <i class="fas fa-clock-rotate"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-black text-white uppercase tracking-wider">My Tickets</h2>
+                        <p class="text-[10px] text-gray-500">Track your support requests & admin replies</p>
+                    </div>
+                </div>
+                <div id="myTicketsList" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+        </div>
+    </main>
+<div class="glass-dropdown-box" id="nexusDropdownMenu">
+    
+    <div class="dropdown-header">
+        <div class="dd-avatar-box">
+            <span id="ddAvatar">U</span>
+        </div>
+        <div class="dd-user-info">
+            <h4 id="ddName">Client Node</h4>
+            <p id="ddEmail">Loading data...</p>
+        </div>
+    </div>
+
+    <div class="dropdown-body">
+        <a href="../../components/pages/hwid-reset.html" class="dd-item group">
+            <i class="fas fa-microchip icon-purple group-hover:drop-shadow-[0_0_8px_rgba(188,19,254,0.8)]"></i>
+            <span>HWID Reset</span>
+        </a>
+        <a href="../../components/pages/my-keys.html" class="dd-item group">
+            <i class="fas fa-key icon-blue group-hover:drop-shadow-[0_0_8px_rgba(0,115,255,0.8)]"></i>
+            <span>My Keys</span>
+        </a>
+        <a href="../../components/pages/referrals.html" class="dd-item group">
+            <i class="fas fa-users icon-emerald group-hover:drop-shadow-[0_0_8px_rgba(0,255,102,0.8)]"></i>
+            <span>Refer & Earn</span>
+        </a>
+        <a href="../../components/pages/helpdesk.html" class="dd-item group">
+            <i class="fas fa-headset icon-yellow group-hover:drop-shadow-[0_0_8px_rgba(243,186,47,0.8)]"></i>
+            <span>Helpdesk</span>
+        </a>
+        <a href="../../components/pages/user-settings.html" class="dd-item group">
+            <i class="fas fa-cog icon-gray group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"></i>
+            <span>App Settings</span>
+        </a>
+        <a href="../../components/pages/payment-settings.html" class="dd-item group" id="adminPanelLink" style="display:none">
+            <i class="fas fa-shield-alt icon-yellow group-hover:drop-shadow-[0_0_8px_rgba(243,186,47,0.8)]"></i>
+            <span>Admin Panel</span>
+        </a>
+    </div>
+
+    <div class="dropdown-footer">
+        <button id="ddLogoutBtn" class="dd-logout-btn">
+            <i class="fas fa-sign-out-alt mr-2"></i> Secure Logout
+        </button>
+    </div>
+</div>
+
+<style>
+    /* FLOATING DROPDOWN CONTAINER */
+    .glass-dropdown-box { position: fixed; top: 75px; right: 15px; width: 250px; background: rgba(12, 14, 20, 0.95); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 1px 2px rgba(255,255,255,0.05); z-index: 99999; transform-origin: top right; transform: scale(0.9) translateY(-15px); opacity: 0; visibility: hidden; transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .glass-dropdown-box.active { transform: scale(1) translateY(0); opacity: 1; visibility: visible; }
+    
+    /* HEADER: USER INFO */
+    .dropdown-header { padding: 20px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 15px; background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%); border-radius: 20px 20px 0 0; }
+    .dd-avatar-box { width: 45px; height: 45px; background: linear-gradient(135deg, #0ea5e9, #9333ea); border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 900; color: white; box-shadow: 0 8px 15px rgba(147, 51, 234, 0.4); border: 1px solid rgba(255,255,255,0.1); }
+    .dd-user-info h4 { color: white; font-size: 13px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .dd-user-info p { color: #94a3b8; font-size: 10px; font-family: monospace; letter-spacing: 0.5px; width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* MENU ITEMS */
+    .dropdown-body { padding: 10px; display: flex; flex-direction: column; gap: 2px; }
+    .dd-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; text-decoration: none; transition: all 0.3s ease; border-left: 3px solid transparent; }
+    .dd-item:hover { background: rgba(255, 255, 255, 0.03); padding-left: 15px; border-left-color: #0ea5e9; }
+    .menu-icon-bg { width: 35px; height: 35px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 14px; transition: all 0.3s ease; }
+    .dd-item h5 { color: #e2e8f0; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 1px; }
+    .dd-item span { color: #64748b; font-size: 9px; font-weight: 500; }
+    
+    /* Icon Colors */
+    .icon-purple { color: #bc13fe; } .icon-blue { color: #0073ff; } .icon-emerald { color: #00ff66; } .icon-yellow { color: #F3BA2F; } .icon-gray { color: #a0a5b5; }
+    
+    /* LOGOUT BUTTON */
+    .dropdown-footer { padding: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .dd-logout-btn { width: 100%; background: rgba(225, 29, 72, 0.1); border: 1px solid rgba(225, 29, 72, 0.3); color: #f43f5e; padding: 12px; border-radius: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; }
+    .dd-logout-btn:hover { background: #e11d48; color: white; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.4); }
+</style>
+
+<script>
+    (function() {
+        const isAdminSub = window.location.pathname.includes('/components/') || window.location.pathname.includes('/menubar/');
+        const adminLink = document.getElementById('adminPanelLink');
+        if (adminLink && isAdminSub) {
+            adminLink.setAttribute('href', adminLink.getAttribute('href').replace('../components/pages/', ''));
+        }
+    })();
+
+    window.toggleNexusMenu = function() {
+        const menu = document.getElementById('nexusDropdownMenu');
+        if(menu) {
+            menu.classList.toggle('active');
+            if(navigator.vibrate) navigator.vibrate(15);
+        }
+    };
+
+    window.addEventListener('click', function(e) {
+        const menu = document.getElementById('nexusDropdownMenu');
+        const toggleBtn = document.getElementById('headerMenuToggleBtn'); 
+        
+        if (menu && menu.classList.contains('active')) {
+            if (!menu.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
+                menu.classList.remove('active');
+            }
+        }
+    });
+</script>
+
+<script type="module">
+    const fbPath = window.location.pathname.includes('/components/') || window.location.pathname.includes('/menubar/') ? "../../assets/scripts/core/firebase.js" : "../../assets/scripts/core/firebase.js";
+    const { auth, db, ref, get, signOut, onAuthStateChanged } = await import(fbPath);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const alias = user.email.split('@')[0];
+            document.getElementById('ddEmail').innerText = user.email;
+            document.getElementById('ddName').innerText = alias;
+            document.getElementById('ddAvatar').innerText = alias.charAt(0).toUpperCase();
+                try {
+                    const snap = await get(ref(db, `users/${user.uid}`));
+                    if (snap.exists()) {
+                        const data = snap.val();
+                        const uname = data.username || data.name || alias;
+                        document.getElementById('ddName').innerText = uname;
+                        document.getElementById('ddAvatar').innerText = uname.charAt(0).toUpperCase();
+                        if (data.role === 'admin') {
+                            const link = document.getElementById('adminPanelLink');
+                            if (link) link.style.display = '';
+                        }
+                    }
+                } catch(e) {}
+        }
+    });
+
+    document.getElementById('ddLogoutBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('ddLogoutBtn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Terminating...';
+        btn.style.pointerEvents = 'none';
+        try {
+            await signOut(auth);
+            const isSub = window.location.pathname.includes('/components/') || window.location.pathname.includes('/menubar/');
+            window.location.href = isSub ? '../../pages/index/index.html' : '../index/index.html'; 
+        } catch (error) {
+            console.error("Logout Error:", error);
+            btn.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i> Error';
+            btn.style.pointerEvents = 'auto';
+        }
+    });
+</script>
+
+<nav id="bottomNav" class="bottom-nav">
+    
+    <a href="../../pages/home/home.html" class="nav-item" id="navHome">
+        <i class="fa-solid fa-house nav-icon"></i>
+        <span class="nav-text" data-i18n="home">Home</span>
+    </a>
+
+    <a href="../../pages/shop/shop.html" class="nav-item" id="navStore">
+        <i class="fa-solid fa-layer-group nav-icon"></i>
+        <span class="nav-text" data-i18n="store">Store</span>
+    </a>
+
+    <a href="../../pages/shop/shop.html" class="nav-center" id="navCenter">
+        <div class="center-circle">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="cartBadge" class="cart-badge">0</span>
+        </div>
+    </a>
+
+    <a href="../../pages/wallet/wallet.html" class="nav-item" id="navWallet">
+        <i class="fa-solid fa-wallet nav-icon"></i>
+        <span class="nav-text" data-i18n="wallet">Wallet</span>
+    </a>
+
+    <a href="../../pages/profile/profile.html" class="nav-item" id="navProfile">
+        <i class="fa-solid fa-user-astronaut nav-icon"></i>
+        <span class="nav-text" data-i18n="profile">Profile</span>
+    </a>
+
+</nav>
+
+<style>
+    :root {
+        --nav-bg-color: rgba(10, 12, 18, 0.85);
+        --nav-border-color: rgba(255, 255, 255, 0.05);
+        --nav-inactive-color: #64748b;
+        --nav-active-color: #f43f5e;
+        --nav-glow-color: rgba(244, 63, 94, 0.7);
+    }
+
+    .bottom-nav {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        width: min(94%, 500px);
+        height: 75px;
+        background: var(--nav-bg-color);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--nav-border-color);
+        border-radius: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        z-index: 99999;
+        transition: transform 0.25s ease;
+        will-change: transform;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        height: 100%;
+        color: var(--nav-inactive-color);
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        border-radius: 30px;
+        transition: color 0.25s ease;
+        -webkit-tap-highlight-color: transparent;
+        will-change: color;
+    }
+
+    .nav-icon {
+        font-size: 22px;
+        margin-bottom: 3px;
+        transition: transform 0.25s ease, text-shadow 0.25s ease;
+        will-change: transform;
+    }
+
+    .nav-text {
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        opacity: 0;
+        transform: translateY(15px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-item.active { color: var(--nav-active-color); }
+    .nav-item.active .nav-icon { transform: translateY(-4px); text-shadow: 0 0 15px var(--nav-glow-color), 0 0 30px var(--nav-glow-color); }
+    .nav-item.active .nav-text { opacity: 1; transform: translateY(0); text-shadow: 0 0 10px var(--nav-glow-color); }
+
+    .nav-center {
+        width: 20%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        top: -30px;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+        z-index: 2;
+    }
+
+    .center-circle {
+        width: 65px; height: 65px;
+        background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-size: 26px;
+        border: 6px solid #050508;
+        box-shadow: 0 10px 25px rgba(244, 63, 94, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        position: relative;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        will-change: transform;
+    }
+
+    .nav-center:hover .center-circle { transform: scale(1.1) translateY(-5px); box-shadow: 0 15px 35px rgba(244, 63, 94, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
+
+    .cart-badge {
+        position: absolute; top: -4px; right: -4px;
+        background: #fff; color: #e11d48; font-size: 11px; font-weight: 900;
+        width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+        border-radius: 50%; border: 2px solid #050508;
+        box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        display: none;
+    }
+
+    .ripple-effect {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: rippleAnim 0.5s ease-out forwards;
+        pointer-events: none;
+    }
+
+    @keyframes rippleAnim { to { transform: scale(3.5); opacity: 0; } }
+
+    .nav-page-label {
+        position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%);
+        font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+        color: rgba(255,255,255,0.15); pointer-events: none; z-index: 99999;
+    }
+
+    .bottom-nav.hidden { transform: translateX(-50%) translateY(150px); }
+</style>
+
+<script>
+(function() {
+    var p = window.location.pathname;
+    document.querySelectorAll('.nav-item').forEach(function(e) {
+        e.classList.remove('active');
+        var h = e.getAttribute('href');
+        if (h && p.includes(h.replace(/^(\.\.\/)+/,'').replace(/\.html$/,''))) e.classList.add('active');
+    });
+    var a = document.querySelector('.nav-item.active .nav-text');
+    if (a) { var l = document.createElement('div'); l.id = 'navPageLabel'; l.className = 'nav-page-label'; l.textContent = a.textContent; document.getElementById('bottomNav').after(l); }
+
+    document.querySelectorAll(".nav-item, .nav-center").forEach(function(b) {
+        b.addEventListener("click", function(e) {
+            var r = document.createElement("span");
+            r.className = "ripple-effect";
+            var rect = this.getBoundingClientRect(), size = Math.max(rect.width, rect.height);
+            r.style.cssText = "width:"+size+"px;height:"+size+"px;left:"+(e.clientX-rect.left-size/2)+"px;top:"+(e.clientY-rect.top-size/2)+"px";
+            this.appendChild(r);
+            setTimeout(function(){ r.remove() }, 500);
+            if (navigator.vibrate) navigator.vibrate(20);
+        });
+    });
+
+    var prev = 0, hidden = !1, bar = document.getElementById("bottomNav");
+    window.addEventListener("scroll", function() {
+        var c = window.pageYOffset, hide = c > prev && c > 80;
+        if (hide !== hidden) { bar.classList.toggle("hidden", hide); hidden = hide }
+        prev = c;
+    }, { passive: !0 });
+
+    window.updateCartBadge = function(n) {
+        var b = document.getElementById("cartBadge");
+        if (b) { b.textContent = n; b.style.display = n > 0 ? "flex" : "none" }
+    };
+})();
+</script>
+
+<div id="notification-container" style="display:none">
+    <div id="notifOverlay" class="notif-overlay" onclick="window.closeNotifPopup(event)">
+        <div class="notif-popup" onclick="event.stopPropagation()">
+            <div class="notif-popup-header">
+                <div class="notif-popup-title"><i class="fas fa-bell" style="color:#00f0ff;"></i> Notifications</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <button class="notif-mark-all-btn" onclick="window.markAllRead()">Clear all</button>
+                    <button class="notif-close-btn" onclick="window.closeNotifPopup()"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div id="notifPopupList" class="notif-popup-list">
+                <div style="text-align:center;padding:40px;color:rgba(255,255,255,0.15);font-size:12px;">Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .notif-overlay { position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:99999; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .notif-popup { background:rgba(15,17,24,0.98); border:1px solid rgba(255,255,255,0.08); border-radius:20px; width:90%; max-width:420px; max-height:80vh; overflow:hidden; box-shadow:0 30px 60px rgba(0,0,0,0.8); animation:popIn 0.25s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes popIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+    .notif-popup-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid rgba(255,255,255,0.06); }
+    .notif-popup-title { font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:1px; color:#fff; display:flex; align-items:center; gap:8px; }
+    .notif-mark-all-btn { background:transparent; border:none; color:#3b82f6; font-size:9px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px; padding:4px 8px; border-radius:6px; }
+    .notif-mark-all-btn:hover { background:rgba(59,130,246,0.1); }
+    .notif-close-btn { background:rgba(255,255,255,0.05); border:none; color:#888; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s; }
+    .notif-close-btn:hover { background:rgba(255,42,95,0.15); color:#ff2a5f; }
+    .notif-popup-list { overflow-y:auto; max-height:calc(80vh - 70px); padding:8px 0; }
+    .notif-popup-item { padding:14px 20px; display:flex; gap:12px; align-items:start; border-bottom:1px solid rgba(255,255,255,0.03); transition:0.2s; }
+    .notif-popup-item:hover { background:rgba(255,255,255,0.02); }
+    .notif-popup-item.unread { background:rgba(59,130,246,0.06); border-left:3px solid #3b82f6; }
+    .notif-popup-item.notif-clickable { cursor:pointer; }
+    .notif-popup-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+    .notif-popup-icon.reply { background:rgba(0,240,255,0.1); color:#00f0ff; }
+    .notif-popup-icon.deposit { background:rgba(0,255,102,0.1); color:#00ff66; }
+    .notif-popup-icon.info { background:rgba(188,19,254,0.1); color:#bc13fe; }
+    .notif-popup-icon.promotion { background:rgba(245,158,11,0.1); color:#f59e0b; }
+    .notif-popup-icon.welcome { background:rgba(16,185,129,0.1); color:#10b981; }
+    .notif-popup-content { flex:1; min-width:0; }
+    .notif-popup-title-text { font-size:12px; font-weight:700; color:#fff; margin-bottom:3px; }
+    .notif-popup-msg { font-size:11px; color:#94a3b8; line-height:1.4; margin-bottom:4px; }
+    .notif-popup-time { font-size:9px; color:#555; font-family:'Space Mono',monospace; }
+</style>
+<script>
+(async function(){
+    const { auth, db, ref, onValue, get, set, update } = await import('../../assets/scripts/core/firebase.js');
+
+    const list = document.getElementById('notifPopupList');
+    const icons = { reply:'fa-reply', deposit:'fa-coins', info:'fa-info-circle', promotion:'fa-tags', welcome:'fa-star' };
+    const cls = { reply:'reply', deposit:'deposit', info:'info', promotion:'promotion', welcome:'welcome' };
+
+    function renderAll(items) {
+        if (!items.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.15);font-size:12px;">No notifications yet</div>'; return; }
+        items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        list.innerHTML = items.map(n => {
+            const time = n.createdAt ? new Date(n.createdAt).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+            const link = n.link || '#';
+            const clickHandler = link !== '#' ? `onclick="window.closeNotifPopup();setTimeout(()=>window.location.href='${link}',200)"` : '';
+            return `<div class="notif-popup-item${n.read ? '' : ' unread'} ${link !== '#' ? 'notif-clickable' : ''}" ${clickHandler}>
+                <div class="notif-popup-icon ${cls[n.type] || 'info'}"><i class="fas ${icons[n.type] || 'fa-info-circle'}"></i></div>
+                <div class="notif-popup-content">
+                    <div class="notif-popup-title-text">${n.title}</div>
+                    <div class="notif-popup-msg">${n.message}</div>
+                    <div class="notif-popup-time">${time}</div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    const CUTOFF_DAYS = 7;
+
+    async function loadAll() {
+        const user = auth.currentUser;
+        if (!user) { list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.15);font-size:12px;">Not logged in</div>'; return; }
+        const all = [];
+        const cutoff = Date.now() - CUTOFF_DAYS * 24 * 60 * 60 * 1000;
+
+        const snap = await get(ref(db, `notifications/${user.uid}`));
+        if (snap.exists()) {
+            const deletes = {};
+            Object.entries(snap.val()).forEach(([id, n]) => {
+                const ts = n.createdAt || 0;
+                if (ts > 0 && ts < cutoff) {
+                    deletes[`${id}`] = null;
+                } else {
+                    all.push({ id, ...n });
+                }
+            });
+            if (Object.keys(deletes).length) await update(ref(db, `notifications/${user.uid}`), deletes);
+        }
+
+        const seenKey = 'nexus_seen_global_' + user.uid;
+        let seen = [];
+        try { seen = JSON.parse(localStorage.getItem(seenKey)) || []; } catch (_) {}
+        try {
+            const gSnap = await get(ref(db, 'global_alerts/promotions'));
+            if (gSnap.exists()) {
+                Object.entries(gSnap.val()).forEach(([id, n]) => {
+                    if (!seen.includes(id)) {
+                        all.push({ id: 'g_' + id, type: 'promotion', title: n.title || 'New Promotion', message: n.message || '', link: n.link || '#', createdAt: n.createdAt, read: false });
+                        seen.push(id);
+                    }
+                });
+                localStorage.setItem(seenKey, JSON.stringify(seen));
+            }
+        } catch (_) {}
+
+        try {
+            const wKey = 'nexus_welcome_' + user.uid;
+            if (localStorage.getItem(wKey) === '1') {
+                all.push({ id: 'welcome', type: 'welcome', title: 'Welcome to ' + (window.siteName || 'Nexus') + '!', message: 'Your account has been created successfully. Start exploring our panels!', link: '/pages/shop/shop.html', createdAt: Date.now(), read: false });
+            }
+        } catch (_) {}
+
+        renderAll(all);
+
+        onValue(ref(db, `notifications/${user.uid}`), (snap) => {
+            if (!snap.exists()) return;
+            const batch = {};
+            Object.entries(snap.val()).forEach(([id, n]) => { if (!n.read) batch[`${id}/read`] = true; });
+            if (Object.keys(batch).length) update(ref(db, `notifications/${user.uid}`), batch);
+        }, { onlyOnce: true });
+    }
+
+    window.refreshNotifPopup = loadAll;
+
+    window.closeNotifPopup = function(e) {
+        const container = document.getElementById('notification-container');
+        if (container) container.style.display = 'none';
+        window.notifPopupOpen = false;
+    };
+    window.markAllRead = async function() {
+        const user = auth.currentUser;
+        if (!user) return;
+        await set(ref(db, `notifications/${user.uid}`), null);
+        try { localStorage.removeItem('nexus_welcome_' + user.uid); } catch (_) {}
+        loadAll();
+    };
+})();
+</script>
+    <div id="toastContainer" class="fixed top-20 right-4 z-[99999] flex flex-col gap-2 pointer-events-none"></div>
+    <script>
+        function loadComponentAndRunScripts(url, containerId) {
+            fetch(url).then(res => { if(!res.ok) throw new Error('Failed to load '+url); return res.text(); }).then(html => {
+                document.getElementById(containerId).innerHTML = html;
+                const scripts = document.getElementById(containerId).getElementsByTagName('script');
+                for (let i = 0; i < scripts.length; i++) {
+                    const ns = document.createElement('script');
+                    if (scripts[i].type) ns.type = scripts[i].type;
+                    ns.text = scripts[i].innerText;
+                    document.body.appendChild(ns);
+                }
+            }).catch(err => console.error(err));
+        }
+        function toggleFaq(el) {
+            const answer = el.nextElementSibling;
+            const icon = el.querySelector('i');
+            const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+            document.querySelectorAll('.faq-answer').forEach(a => { a.style.maxHeight = '0'; a.style.padding = '0 16px'; });
+            document.querySelectorAll('.faq-question i').forEach(i => i.style.transform = 'rotate(0deg)');
+            if (!isOpen) {
+                answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+                answer.style.padding = '12px 16px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        window.submitTicket = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('ticketSubmitBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.style.pointerEvents = 'none';
+            const { auth, db, ref, push, get, serverTimestamp } = await import('./../../assets/scripts/core/firebase.js');
+            try {
+                const user = auth.currentUser;
+                if (!user) { showToast('Not authenticated', 'error'); btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Ticket'; btn.style.pointerEvents = 'auto'; return; }
+                const category = document.getElementById('ticketCategory').value;
+                const priority = document.getElementById('ticketPriority').value;
+                const subject = document.getElementById('ticketSubject').value.trim();
+                const txnId = document.getElementById('ticketTxnId').value.trim();
+                const message = document.getElementById('ticketMessage').value.trim();
+                if (!category || !subject || !message) { showToast('Please fill all required fields', 'error'); btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Ticket'; btn.style.pointerEvents = 'auto'; return; }
+                const userSnap = await get(ref(db, `users/${user.uid}`));
+                const userData = userSnap.exists() ? userSnap.val() : {};
+                await push(ref(db, 'tickets'), {
+                    uid: user.uid,
+                    username: userData.username || 'Unknown',
+                    email: user.email,
+                    balance: parseFloat(userData.balance || 0),
+                    category: category,
+                    priority: priority,
+                    subject: subject,
+                    txnId: txnId || '',
+                    message: message,
+                    status: 'open',
+                    adminReply: '',
+                    createdAt: serverTimestamp()
+                });
+                document.getElementById('ticketForm').reset();
+                document.getElementById('ticketCategory').selectedIndex = 0;
+                document.querySelectorAll('.cdrop-trigger .cdrop-label').forEach(l => {
+                    const parent = l.closest('.cdrop');
+                    if (!parent) return;
+                    const first = parent.querySelector('.cdrop-item:first-child');
+                    if (first) l.textContent = first.textContent.trim();
+                });
+                initCustomDropdowns();
+                showToast('Ticket submitted! Admin will respond shortly.');
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Ticket';
+            btn.style.pointerEvents = 'auto';
+        };
+        function showToast(msg, type = 'success') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = 'toast-msg ' + type;
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> <span>${msg}</span>`;
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(30px)'; setTimeout(() => t.remove(), 300); }, 2500);
+        }
+        window.supportLinks = {};
+
+        window.getLink = function(type) {
+            const links = { wa: 'whatsapp', email: 'email', tg: 'telegram', dc: 'discord' };
+            return window.supportLinks[links[type]] || '#';
+        };
+
+        function initCustomDropdowns() {
+            document.querySelectorAll('.cdrop').forEach(wrap => {
+                const trigger = wrap.querySelector('.cdrop-trigger');
+                const menu = wrap.querySelector('.cdrop-menu');
+                const native = wrap.querySelector('.cdrop-native');
+                if (!trigger || !menu || !native) return;
+                trigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.cdrop-menu.open').forEach(m => { if (m !== menu) m.classList.remove('open'); });
+                    menu.classList.toggle('open');
+                });
+                menu.querySelectorAll('.cdrop-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        native.value = item.dataset.value;
+                        trigger.querySelector('.cdrop-label').textContent = item.textContent.trim();
+                        menu.classList.remove('open');
+                        native.dispatchEvent(new Event('change', { bubbles: true }));
+                    });
+                });
+            });
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.cdrop-menu.open').forEach(m => m.classList.remove('open'));
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.faq-answer').forEach(a => { a.style.maxHeight = '0'; a.style.padding = '0 16px'; a.style.overflow = 'hidden'; a.style.transition = 'all 0.3s ease'; });
+                initCustomDropdowns();
+            }, 100);
+        });
+    </script>
+    <script type="module">
+        import { db, ref, get } from "./../../assets/scripts/core/firebase.js";
+        const snap = await get(ref(db, 'support_links'));
+        const d = snap.exists() ? snap.val() : {};
+        window.supportLinks = d;
+
+        const info = [
+            { el: 'supportWa', lbl: 'supportWaLabel', val: d.whatsapp, txt: d.whatsapp_display || 'Chat' },
+            { el: 'supportEmail', lbl: 'supportEmailLabel', val: d.email, txt: d.email },
+            { el: 'supportTg', lbl: 'supportTgLabel', val: d.telegram, txt: d.telegram_display || 'Join' },
+            { el: 'supportDc', lbl: 'supportDcLabel', val: d.discord, txt: d.discord_display || 'Join' }
+        ];
+
+        const vis = info.filter(x => x.val);
+        vis.forEach(x => {
+            document.getElementById(x.el).style.display = '';
+            document.getElementById(x.lbl).innerText = x.txt;
+        });
+
+        const grid = document.getElementById('supportCards');
+        const col1 = document.getElementById('supportCol1');
+        const tg = document.getElementById('supportTg');
+        const dc = document.getElementById('supportDc');
+
+        if (vis.length === 4) {
+            grid.className = 'grid grid-cols-2 gap-4';
+            col1.className = 'flex flex-col gap-4';
+            const right = document.createElement('div');
+            right.className = 'flex flex-col gap-4';
+            right.appendChild(tg);
+            right.appendChild(dc);
+            while (grid.children.length > 1) grid.removeChild(grid.lastChild);
+            grid.appendChild(right);
+        } else {
+            grid.className = 'grid grid-cols-1 md:grid-cols-3 gap-4';
+            col1.className = 'flex flex-col gap-4';
+        }
+    </script>
+    <script type="module">
+        import { auth, db, ref, onValue, onAuthStateChanged } from "./../../assets/scripts/core/firebase.js";
+onAuthStateChanged(auth, (user) => {
+if (!user) return window.location.href = "../../pages/index/index.html?tab=login";
+            const section = document.getElementById('myTicketsSection');
+            section.style.display = '';
+            onValue(ref(db, 'tickets'), (snap) => {
+                const data = snap.val() || {};
+                const tickets = Object.entries(data).filter(([, t]) => t.uid === user.uid).map(([id, t]) => ({ id, ...t }));
+                const list = document.getElementById('myTicketsList');
+                if (!tickets.length) {
+                    list.innerHTML = `<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-size:12px;">No tickets submitted yet</div>`;
+                    return;
+                }
+                tickets.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                list.innerHTML = tickets.map(t => {
+                    const date = t.createdAt ? new Date(t.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+                    const isOpen = t.status === 'open';
+                    return `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                <span style="background:${isOpen ? 'rgba(0,255,102,0.15)' : 'rgba(255,255,255,0.05)'};color:${isOpen ? '#00ff66' : '#888'};font-size:9px;font-weight:800;padding:2px 8px;border-radius:50px;text-transform:uppercase;">${t.status}</span>
+                                <span style="color:#888;font-size:10px;font-weight:600;">${t.subject}</span>
+                            </div>
+                            <span style="color:#555;font-size:9px;font-family:monospace;">${date}</span>
+                        </div>
+                        <div style="font-size:11px;color:#94a3b8;margin-bottom:${t.adminReply ? '8px' : '0'};line-height:1.5;">${t.message}</div>
+                        ${t.adminReply ? `<div style="font-size:11px;color:#00f0ff;background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.12);border-radius:10px;padding:10px;line-height:1.5;"><i class="fas fa-reply" style="margin-right:5px;"></i> <b style="color:#fff;">Admin:</b> ${t.adminReply}</div>` : ''}
+                    </div>`;
+                }).join('');
+            });
+        });
+    </script>
+    <style>
+        .premium-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -100; background-color: #030305; overflow: hidden; }
+        .bg-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; animation: orbMove 18s infinite alternate ease-in-out; }
+        .bg-orb-1 { width: 50vw; height: 50vw; top: -15%; left: -15%; animation-duration: 22s; animation-name: orbMove, orbPulse1; }
+        .bg-orb-2 { width: 60vw; height: 60vw; bottom: -20%; right: -15%; animation-duration: 28s, 7s; animation-direction: alternate-reverse, normal; animation-name: orbMove, orbPulse2; }
+        .bg-grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -99; animation: gridPan 30s linear infinite; }
+        @keyframes orbMove { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(15vw,15vh) scale(1.1); } 66% { transform: translate(-10vw,20vh) scale(0.9); } 100% { transform: translate(10vw,-10vh) scale(1.2); } }
+        @keyframes orbPulse1 { 0% { opacity: 0.1; transform: scale(0.8); } 50% { opacity: 0.45; transform: scale(1.3); } 100% { opacity: 0.1; transform: scale(0.8); } }
+        @keyframes orbPulse2 { 0% { opacity: 0.4; transform: scale(1.1); } 50% { opacity: 0.1; transform: scale(0.7); } 100% { opacity: 0.4; transform: scale(1.1); } }
+        @keyframes gridPan { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        .premium-glass-card { background: linear-gradient(145deg, rgba(15,18,25,0.6) 0%, rgba(5,7,10,0.85) 100%); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.05); transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+        .premium-glass-card:hover { border-color: rgba(37,99,235,0.3); box-shadow: 0 20px 45px rgba(0,0,0,0.9); }
+        .toast-msg { background: rgba(15,17,24,0.96); border: 1px solid rgba(255,255,255,0.08); padding: 12px 18px; border-radius: 12px; color: #fff; font-size: 12px; font-weight: 500; pointer-events: all; display: flex; align-items: center; gap: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.8); animation: toastIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards; transition: all 0.3s ease; }
+        .toast-msg.success i { color: #00ff66; } .toast-msg.error i { color: #ff2a5f; } .toast-msg.info i { color: #3b82f6; }
+        @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .faq-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; overflow: hidden; }
+        .faq-question { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: 700; color: #e2e8f0; transition: all 0.3s ease; user-select: none; }
+        .faq-question:hover { background: rgba(255,255,255,0.03); }
+        .faq-answer { padding: 0 16px; color: #94a3b8; font-size: 11px; line-height: 1.6; max-height: 0; overflow: hidden; transition: all 0.3s ease; }
+        /* ── Custom Dropdown ── */
+        .cdrop { position:relative; width:100%; z-index:20; }
+        .cdrop-native { display:none; }
+        .cdrop-trigger {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:13px 18px; background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.08);
+            border-radius:16px; cursor:pointer; transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            backdrop-filter:blur(10px); user-select:none; gap:10px;
+        }
+        .cdrop-trigger:hover { background:rgba(37,99,235,0.06); border-color:rgba(37,99,235,0.2); }
+        .cdrop-trigger .cdrop-label { font-size:13px; font-weight:500; color:rgba(255,255,255,0.5); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:0.3s; }
+        .cdrop-trigger:hover .cdrop-label { color:rgba(255,255,255,0.8); }
+        .cdrop-trigger i { font-size:11px; color:rgba(37,99,235,0.5); transition:0.4s; flex-shrink:0; }
+        .cdrop-menu {
+            position:absolute; top:calc(100% + 6px); left:0; right:0;
+            background:rgba(8,10,18,0.98); border:1px solid rgba(37,99,235,0.15);
+            border-radius:14px; overflow:hidden; opacity:0; visibility:hidden;
+            transform:translateY(-8px) scale(0.96); transform-origin:top center;
+            transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow:0 20px 60px rgba(0,0,0,0.8),0 0 40px rgba(37,99,235,0.05);
+            backdrop-filter:blur(20px); max-height:220px; overflow-y:auto;
+        }
+        .cdrop-menu.open { opacity:1; visibility:visible; transform:translateY(0) scale(1); }
+        .cdrop-menu::-webkit-scrollbar { width:4px; }
+        .cdrop-menu::-webkit-scrollbar-track { background:transparent; }
+        .cdrop-menu::-webkit-scrollbar-thumb { background:rgba(37,99,235,0.3); border-radius:10px; }
+        .cdrop-item {
+            display:flex; align-items:center; gap:10px; padding:12px 16px;
+            font-size:13px; font-weight:500; color:rgba(255,255,255,0.5); cursor:pointer;
+            transition:all 0.25s; border-left:3px solid transparent;
+        }
+        .cdrop-item i { font-size:13px; color:rgba(37,99,235,0.35); transition:0.25s; width:18px; text-align:center; }
+        .cdrop-item:hover { background:rgba(37,99,235,0.08); color:#fff; border-left-color:#3b82f6; padding-left:20px; }
+        .cdrop-item:hover i { color:#3b82f6; }
+        .cdrop-item:active { background:rgba(37,99,235,0.15); transform:scale(0.98); }
+        .cdrop-item + .cdrop-item { border-top:1px solid rgba(255,255,255,0.03); }
+        .cdrop-item:first-child { color:rgba(255,255,255,0.3); font-style:italic; font-size:12px; }
+        .cdrop-item:first-child:hover { color:#fff; }
+    </style>
+</body>
+</html>

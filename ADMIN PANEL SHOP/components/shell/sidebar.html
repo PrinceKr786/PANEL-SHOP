@@ -1,0 +1,374 @@
+<!-- 
+  ========================================================================
+  COMPONENT: ULTRA-PREMIUM ADMIN SIDEBAR
+  Path: components/shell/sidebar.html
+  Description: High-Tech Cyberpunk Sidebar with Neon Glows & Animations.
+               Fully self-contained with overlay, theme toggle, Escape key handler,
+               and body dataset guard. No external JS/CSS dependencies.
+  ========================================================================
+-->
+
+<div id="sidebar-overlay"></div>
+
+<aside class="nexus-admin-sidebar" id="nexusSidebar">
+    
+    <!-- ========================================== -->
+    <!-- BRANDING AREA (Auto-fetches from Firebase) -->
+    <!-- ========================================== -->
+    <div class="sidebar-brand-container">
+        <div class="brand-logo-box">
+            <img id="sidebarBrandLogo" src="" alt="Logo" style="display:none;">
+            <i id="sidebarBrandIcon" class="fas fa-bolt"></i>
+        </div>
+        <span id="sidebarBrandText" class="brand-text-glow">ADMIN PRO</span>
+        
+        <!-- Mobile Close Button -->
+        <button id="mobileSidebarClose" class="mobile-close-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- NAVIGATION MENU (Custom Scrollbar Applied) -->
+    <!-- ========================================== -->
+    <ul class="sidebar-nav-menu custom-scrollbar">
+        <li class="nav-group-title">Core Operations</li>
+        <li><a class="nav-item" href="../dashboard/dashboard.html"><div class="nav-glow-bar"></div><i class="fas fa-th-large nav-icon"></i><span class="nav-text">Dashboard</span></a></li>
+        <li><a class="nav-item" href="../add-panel/add-panel.html"><div class="nav-glow-bar"></div><i class="fas fa-plus-square nav-icon"></i><span class="nav-text">Add Panel</span></a></li>
+        <li><a class="nav-item" href="../manage-panels/manage-panels.html"><div class="nav-glow-bar"></div><i class="fas fa-box-open nav-icon"></i><span class="nav-text">Manage Panels</span></a></li>
+        <li><a class="nav-item" href="../categories/categories.html"><div class="nav-glow-bar"></div><i class="fas fa-tags nav-icon" style="color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.4);"></i><span class="nav-text">Categories</span></a></li>
+
+        <li class="nav-group-title">Finance & Users</li>
+        <li><a class="nav-item" href="../gateway/gateway.html"><div class="nav-glow-bar"></div><i class="fas fa-bolt nav-icon" style="color: #ff2a5f; text-shadow: 0 0 10px rgba(255,42,95,0.4);"></i><span class="nav-text">Gateway Payments</span><span class="nav-badge" id="badgeGateway">0</span></a></li>
+        <li><a class="nav-item" href="../crypto/crypto.html"><div class="nav-glow-bar"></div><i class="fab fa-bitcoin nav-icon" style="color: #F3BA2F; text-shadow: 0 0 10px rgba(243,186,47,0.4);"></i><span class="nav-text">Crypto Deposits</span><span class="nav-badge" id="badgeCrypto">0</span></a></li>
+        <li><a class="nav-item" href="../manual/manual.html"><div class="nav-glow-bar"></div><i class="fas fa-hand-holding-usd nav-icon" style="color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.4);"></i><span class="nav-text">Manual Deposits</span><span class="nav-badge" id="badgeManual">0</span></a></li>
+        <li><a class="nav-item" href="../purchases/purchases.html"><div class="nav-glow-bar"></div><i class="fas fa-shopping-cart nav-icon"></i><span class="nav-text">Purchases</span></a></li>
+        <li><a class="nav-item" href="../users/users.html"><div class="nav-glow-bar"></div><i class="fas fa-users nav-icon"></i><span class="nav-text">Users Control</span><span class="nav-badge" id="badgeUsers">0</span></a></li>
+
+        <li class="nav-group-title">Marketing</li>
+        <li><a class="nav-item" href="../promotions/promotions.html"><div class="nav-glow-bar"></div><i class="fas fa-bullhorn nav-icon"></i><span class="nav-text">Promotions</span></a></li>
+        <li><a class="nav-item" href="../coupons/coupons.html"><div class="nav-glow-bar"></div><i class="fas fa-ticket-alt nav-icon"></i><span class="nav-text">Coupons</span></a></li>
+
+        <li class="nav-group-title">Configuration</li>
+        <li><a class="nav-item" href="../settings/settings.html"><div class="nav-glow-bar"></div><i class="fas fa-qrcode nav-icon"></i><span class="nav-text">Payment Settings</span></a></li>
+        <li><a class="nav-item" href="../contact/contact.html"><div class="nav-glow-bar"></div><i class="fas fa-headset nav-icon"></i><span class="nav-text">Support Tickets</span><span class="nav-badge" id="badgeTickets">0</span></a></li>
+        <li><a class="nav-item" href="../branding/branding.html"><div class="nav-glow-bar"></div><i class="fas fa-image nav-icon"></i><span class="nav-text">Site Branding</span></a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <button id="sidebarLogoutBtn" class="sidebar-logout-btn" type="button">
+            <span class="logout-scan"></span> 
+            <i class="fas fa-power-off"></i> <span>Secure Logout</span>
+        </button>
+    </div>
+
+<style>
+    * {
+        -webkit-tap-highlight-color: transparent !important;
+        outline: none !important;
+        text-decoration: none !important;
+    }
+
+    .nexus-admin-sidebar {
+        --sb-bg: rgba(7, 8, 12, 0.95);
+        --sb-border: rgba(255, 255, 255, 0.08);
+        --sb-text: #8b949e;
+        --sb-hover: #ffffff;
+        --sb-accent: #bc13fe;
+        --sb-accent-sec: #00f0ff;
+        
+        width: 270px;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--sb-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid var(--sb-border);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        z-index: 1001;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease, visibility 0.3s ease;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(0);
+    }
+
+    .nexus-admin-sidebar.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--sb-accent); }
+
+    .sidebar-brand-container {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        padding: 0 25px;
+        border-bottom: 1px solid var(--sb-border);
+        background: linear-gradient(180deg, rgba(188, 19, 254, 0.05) 0%, transparent 100%);
+        position: relative;
+    }
+    .brand-logo-box {
+        width: 36px; height: 36px;
+        background: rgba(188, 19, 254, 0.1);
+        border: 1px solid rgba(188, 19, 254, 0.3);
+        border-radius: 10px;
+        display: flex; justify-content: center; align-items: center;
+        color: var(--sb-accent); font-size: 18px;
+        margin-right: 12px; overflow: hidden;
+        box-shadow: 0 0 15px rgba(188, 19, 254, 0.2);
+    }
+    .brand-logo-box img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-text-glow {
+        font-size: 19px; font-weight: 900; letter-spacing: 1.5px;
+        background: linear-gradient(90deg, #bc13fe, #00f0ff);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 5px rgba(188, 19, 254, 0.5));
+    }
+
+    .sidebar-nav-menu { flex: 1; padding: 15px 0; overflow-y: auto; overflow-x: hidden; list-style: none; }
+    
+    .nav-group-title {
+        margin: 20px 25px 10px; font-size: 10px; font-weight: 800;
+        color: #475569; text-transform: uppercase; letter-spacing: 2px;
+    }
+
+    .nav-item {
+        position: relative;
+        padding: 12px 25px; display: flex; align-items: center;
+        color: var(--sb-text); cursor: pointer; transition: all 0.3s ease;
+        font-size: 13px; font-weight: 600; margin-bottom: 5px;
+        overflow: hidden;
+    }
+    
+    .nav-glow-bar {
+        position: absolute; left: 0; top: 0; height: 100%; width: 3px;
+        background: var(--sb-accent);
+        box-shadow: 0 0 10px var(--sb-accent);
+        transform: scaleY(0); transition: transform 0.3s ease;
+    }
+
+    .nav-icon { width: 26px; font-size: 15px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s; z-index: 2; }
+    .nav-text { z-index: 2; transition: transform 0.3s ease; }
+
+    .nav-item:hover { color: var(--sb-hover); background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%); }
+    .nav-item:hover .nav-icon { transform: translateX(4px) scale(1.1); color: var(--sb-hover); }
+    .nav-item:hover .nav-text { transform: translateX(4px); }
+    .nav-item:hover .nav-glow-bar { transform: scaleY(0.5); opacity: 0.5; }
+    
+    .nav-item.active { color: var(--sb-hover); background: linear-gradient(90deg, rgba(188, 19, 254, 0.1) 0%, transparent 100%); }
+    .nav-item.active .nav-glow-bar { transform: scaleY(1); opacity: 1; }
+    .nav-item.active .nav-icon { color: var(--sb-accent); transform: translateX(6px) scale(1.1); text-shadow: 0 0 15px rgba(188, 19, 254, 0.8); }
+    .nav-item.active .nav-text { transform: translateX(6px); font-weight: 700; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+    .nav-badge {
+        margin-left: auto; background: linear-gradient(135deg, #ff2a5f, #c8102e); color: white;
+        font-size: 9px; font-weight: 900; padding: 3px 7px; min-width: 20px; text-align: center;
+        border-radius: 8px; box-shadow: 0 0 12px rgba(255, 42, 95, 0.6);
+        z-index: 2; animation: badgePulse 2s ease-in-out infinite; display:none;
+    }
+    @keyframes badgePulse { 0%,100% { box-shadow: 0 0 12px rgba(255,42,95,0.6); } 50% { box-shadow: 0 0 20px rgba(255,42,95,0.9), 0 0 40px rgba(255,42,95,0.3); } }
+
+    .page-pending-badge {
+        display:flex; align-items:center; gap:4px; margin-right:12px;
+        background:linear-gradient(135deg,#ff2a5f,#c8102e); color:#fff;
+        font-size:9px; font-weight:900; padding:3px 10px; border-radius:20px;
+        box-shadow:0 0 15px rgba(255,42,95,0.5);
+        animation: badgePulse 2s ease-in-out infinite; height:fit-content;
+    }
+
+    .sidebar-footer {
+        padding: 25px 20px 40px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        background: rgba(255,255,255,0.02);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .sidebar-theme-toggle {
+        width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center;
+        background: transparent; border: 1px solid rgba(255,255,255,0.12); border-radius: 50%;
+        color: #fff; font-size: 16px; cursor: pointer; transition: 0.3s;
+    }
+    .sidebar-theme-toggle:hover {
+        color: #00f0ff; background: rgba(255,255,255,0.05);
+    }
+
+    .sidebar-logout-btn {
+        position: relative; width: 100%;
+        background: rgba(255, 42, 95, 0.05); border: 1px solid rgba(255, 42, 95, 0.3);
+        color: #ff2a5f; padding: 14px; border-radius: 14px; font-size: 12px; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s ease;
+        display: flex; justify-content: center; align-items: center; gap: 8px;
+        overflow: hidden;
+    }
+    .logout-scan {
+        position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,42,95,0.4), transparent);
+        transform: skewX(-20deg); transition: 0.5s;
+    }
+    .sidebar-logout-btn:hover { background: #ff2a5f; color: white; box-shadow: 0 10px 25px rgba(255, 42, 95, 0.5); transform: translateY(-2px); }
+    .sidebar-logout-btn:hover .logout-scan { animation: scanLogout 1.5s infinite; }
+    @keyframes scanLogout { 100% { left: 200%; } }
+
+    .mobile-close-btn { display: none; background: transparent; border: none; color: var(--sb-text); font-size: 22px; position: absolute; right: 20px; cursor: pointer; transition: 0.3s; }
+    .mobile-close-btn:hover { color: #ff2a5f; transform: rotate(90deg); }
+    
+    #sidebar-overlay {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.75);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 1000;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    #sidebar-overlay.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    @media (min-width: 769px) {
+        #sidebar-overlay {
+            display: none !important;
+            pointer-events: none !important;
+        }
+        .mobile-close-btn { display: none; }
+    }
+
+    @media (max-width: 768px) {
+        .nexus-admin-sidebar { transform: translateX(-100%); opacity: 0; visibility: hidden; box-shadow: 50px 0 100px rgba(0,0,0,0.9); }
+        .nexus-admin-sidebar.open { transform: translateX(0); opacity: 1; visibility: visible; }
+        .mobile-close-btn { display: block; }
+        #sidebar-overlay { display: block; }
+    }
+
+    .light-theme .sidebar-brand-container,
+    .light-theme .nexus-admin-sidebar {
+        background: rgba(255,255,255,0.95);
+        border-right-color: rgba(0,0,0,0.08);
+    }
+
+    .light-theme .nav-item {
+        color: #4b5563;
+    }
+
+    .light-theme .nav-item:hover,
+    .light-theme .nav-item.active {
+        background: rgba(59,130,246,0.08);
+    }
+
+    .light-theme .nav-item.active .nav-icon,
+    .light-theme .nav-item:hover .nav-icon {
+        color: #1d4ed8;
+    }
+
+    .light-theme .sidebar-footer {
+        background: rgba(248,248,250,0.9);
+    }
+
+    .light-theme .sidebar-logout-btn {
+        background: rgba(239,68,68,0.08);
+        color: #b91c1c;
+        border-color: rgba(239,68,68,0.2);
+    }
+
+    .light-theme .sidebar-theme-toggle {
+        color: #111;
+        border-color: rgba(0,0,0,0.12);
+    }
+
+    .light-theme .sidebar-theme-toggle:hover {
+        background: rgba(0,0,0,0.06);
+    }
+</style>
+
+<script>
+(async function() {
+    const { auth, signOut } = await import('../../assets/scripts/firebase.js');
+    const { initBadges } = await import('../../assets/scripts/badges.js');
+    initBadges();
+
+    const sidebar = document.getElementById('nexusSidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const closeBtn = document.getElementById('mobileSidebarClose');
+    const themeBtn = document.getElementById('sidebarThemeToggle');
+    const logoutBtn = document.getElementById('sidebarLogoutBtn');
+
+    function openSidebar() {
+        if (sidebar) sidebar.classList.add('open');
+        if (overlay) overlay.classList.add('open');
+    }
+
+    function closeSidebar() {
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('open');
+    }
+
+    if (mobileBtn) mobileBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (overlay) overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
+
+    if (themeBtn) {
+        const applyTheme = (theme) => {
+            document.body.classList.toggle('light-theme', theme === 'light');
+            themeBtn.innerHTML = theme === 'light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('nexusDashboardTheme', theme);
+        };
+        applyTheme(localStorage.getItem('nexusDashboardTheme') === 'light' ? 'light' : 'dark');
+        themeBtn.addEventListener('click', () => applyTheme(document.body.classList.contains('light-theme') ? 'dark' : 'light'));
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            logoutBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> <span>TERMINATING...</span>';
+            logoutBtn.style.pointerEvents = 'none';
+            try {
+                await signOut(auth);
+                window.location.href = '../../pages/index/index.html';
+            } catch (error) {
+                console.error('Logout Error:', error);
+                logoutBtn.innerHTML = '<i class="fas fa-power-off"></i> <span>Secure Logout</span>';
+                logoutBtn.style.pointerEvents = 'auto';
+            }
+        });
+    }
+
+    const links = document.querySelectorAll('.nav-item');
+    const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+    links.forEach(link => {
+        const href = (link.getAttribute('href') || '').split('/').pop().toLowerCase();
+        if (href && currentPage === href) link.classList.add('active');
+
+        link.addEventListener('click', (e) => {
+            if (window.innerWidth > 768) return;
+            e.preventDefault();
+            closeSidebar();
+            setTimeout(() => { window.location.href = link.getAttribute('href'); }, 250);
+        });
+    });
+
+    if (window.innerWidth <= 768) closeSidebar();
+})();
+</script>
+

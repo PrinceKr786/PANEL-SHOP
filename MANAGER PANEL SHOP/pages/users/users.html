@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Manager | Users Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/styles/base.css">
+    <link rel="stylesheet" href="users.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+    <div class="dash-bg-engine"><div class="dash-grid"></div><div class="dash-glow top-left"></div><div class="dash-glow bottom-right"></div></div>
+    <div id="sidebarContainer"></div>
+    <main class="main-content-wrapper">
+        <header class="dash-header glass-header"><div class="header-left"><button id="mobileMenuBtn" class="mobile-menu-toggle" type="button" aria-label="Open sidebar"><i class="fas fa-bars-staggered"></i></button><div class="page-title-box"><h1 id="page-title" class="cyber-title">Users Control</h1><div class="title-underline"></div></div></div><div class="header-right"><span class="page-pending-badge" id="pageBadge"></span><div class="live-status"><span class="pulse-dot"></span> <span class="status-text">SYSTEM ONLINE</span></div><button id="sidebarThemeToggle" class="sidebar-theme-toggle" type="button" aria-label="Toggle theme"><i class="fas fa-moon"></i></button><div class="admin-profile-chip"><div class="admin-avatar"><i class="fas fa-user-shield"></i></div><span id="headerAdminEmail" class="admin-email">MANAGER</span></div></div></header>
+        <div class="sections-container custom-scrollbar">
+            <section class="page-section active-section">
+                <div class="dash-box glass-panel">
+                    <div class="box-header" style="display:flex;justify-content:space-between;align-items:center;">
+                        <h2><i class="fas fa-users" style="color:#bc13fe;margin-right:10px;"></i> User Management</h2>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <button class="qa-btn" style="padding:8px 16px;font-size:11px;" onclick="initUsersTable()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <div class="search-box" style="position:relative;width:250px;">
+                                <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#888;font-size:13px;"></i>
+                                <input type="text" id="searchUsersInput" placeholder="Search by name, email or UID..." style="width:100%;padding:9px 14px 9px 38px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;color:#fff;font-size:13px;outline:none;">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-height:600px;overflow-y:auto;overflow-x:auto;width:100%;">
+                        <table class="users-table">
+                            <thead><tr><th>Joined</th><th>Username / Email / UID</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="usersTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="usersToastContainer"></div>
+    <div id="usersLoader" class="loader-overlay hidden"><div class="spinner"></div></div>
+
+    <script type="module" src="users.js"></script>
+    <script type="module">
+        import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
+        import { markSeen } from '../../assets/scripts/badges.js';
+        import { db, ref, onValue } from '../../assets/scripts/firebase.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSidebar();
+            markSeen('users');
+        });
+        onValue(ref(db, 'users'), (snap) => {
+            const data = snap.val();
+            if (!data) { const e = document.getElementById('pageBadge'); if(e){e.textContent='';e.style.display='none';} return; }
+            const lastSeen = parseInt(localStorage.getItem('adminSeen_users') || '0') || Date.now();
+            const count = Object.values(data).filter(u => (u.createdAt || 0) > lastSeen).length;
+            const el = document.getElementById('pageBadge');
+            if (el) { el.textContent = count > 0 ? count + ' new' : ''; el.style.display = count > 0 ? '' : 'none'; }
+        });
+    </script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Manager | Add Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/styles/base.css">
+    <link rel="stylesheet" href="add-panel.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+    <div class="dash-bg-engine"><div class="dash-grid"></div><div class="dash-glow top-left"></div><div class="dash-glow bottom-right"></div></div>
+    <div id="sidebarContainer"></div>
+    <main class="main-content-wrapper">
+        <header class="dash-header glass-header"><div class="header-left"><button id="mobileMenuBtn" class="mobile-menu-toggle" type="button" aria-label="Open sidebar"><i class="fas fa-bars-staggered"></i></button><div class="page-title-box"><h1 id="page-title" class="cyber-title">Add Panel</h1><div class="title-underline"></div></div></div><div class="header-right"><div class="live-status"><span class="pulse-dot"></span> <span class="status-text">SYSTEM ONLINE</span></div><button id="sidebarThemeToggle" class="sidebar-theme-toggle" type="button" aria-label="Toggle theme"><i class="fas fa-moon"></i></button><div class="admin-profile-chip"><div class="admin-avatar"><i class="fas fa-user-shield"></i></div><span id="headerAdminEmail" class="admin-email">MANAGER</span></div></div></header>
+        <div class="sections-container custom-scrollbar">
+            <section class="page-section active-section">
+                <div class="add-panel-grid">
+                    <div class="dash-box glass-panel">
+                        <div class="box-header"><h2><i class="fas fa-edit" style="color:#bc13fe;margin-right:8px;"></i> Panel Details</h2></div>
+                        <div class="form-group"><label>Panel Name</label><input id="panelName" class="form-input" placeholder="E.g., VIP Injector v1" type="text"/></div>
+                        <div class="form-group"><label>Logo Image URL</label><input id="panelLogo" class="form-input" placeholder="https://..." type="url"/></div>
+                        <div class="form-group"><label>Category</label><div class="cat-select-wrap"><div class="cdrop" id="cdrop"><div class="cdrop-trigger" id="cdropTrigger"><span class="cdrop-label">Select category...</span><i class="fas fa-chevron-down"></i></div><div class="cdrop-menu" id="cdropMenu"></div><select id="panelCategory" class="cdrop-native"><option value="">Select category...</option></select></div><button class="qa-btn" onclick="window.open('../categories/categories.html','_blank')" title="Manage Categories"><i class="fas fa-cog"></i></button></div></div>
+                        <div class="form-group"><label>YouTube Video Link</label><input id="panelYt" class="form-input" placeholder="https://www.youtube.com/watch?v=..." type="url"/></div>
+                        <div class="form-group"><label>Update File Link</label><input id="panelLink" class="form-input" placeholder="https://t.me/..." type="url"/></div>
+                        <div class="form-group"><label>Feedback Link (Optional)</label><input id="panelFeedback" class="form-input" placeholder="https://t.me/..." type="url"/></div>
+                        <div class="form-group"><label>Description</label><textarea id="panelDesc" class="form-input" placeholder="- Aimbot&#10;- Auto Headshot" rows="3"></textarea></div>
+
+                        <div class="plans-section">
+                            <div class="plans-header">
+                                <label style="margin:0;font-weight:600;"><i class="fas fa-tags" style="color:#bc13fe;"></i> Pricing Plans</label>
+                                <button class="qa-btn" style="padding:6px 14px;font-size:11px;" id="btnAddPlanRow"><i class="fas fa-plus"></i> Add Plan</button>
+                            </div>
+                            <div id="plansContainer">
+                                    <div class="plan-row">
+                                        <input class="p-label form-input plan-name-input" placeholder="Plan Name (e.g. 1 Day)" required type="text"/>
+                                        <input class="p-price form-input plan-price-input" placeholder="Price (₹)" required type="number"/>
+                                        <input class="p-keys form-input plan-keys-input" placeholder="Keys" value="1" type="number"/>
+                                        <button class="delete-plan-btn" onclick="this.parentElement.remove(); updateLivePreview();"><i class="fas fa-trash"></i></button>
+                                    </div>
+                            </div>
+                        </div>
+                        <button class="qa-btn" style="width:100%;justify-content:center;padding:14px;margin-top:10px;background:rgba(188,19,254,0.15);border-color:#bc13fe;" id="btnSubmitPanel"><i class="fas fa-cloud-upload-alt"></i> PUBLISH PANEL</button>
+                    </div>
+
+                    <div>
+                        <div class="box-header" style="margin-bottom:15px;"><h3 style="color:#888;font-size:14px;"><i class="fas fa-eye"></i> Live Preview</h3></div>
+                        <div class="panel-preview-card" id="livePreviewCard"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="panelToastContainer"></div>
+    <div id="panelLoader" class="loader-overlay hidden"><div class="spinner"></div></div>
+
+    <script type="module" src="add-panel.js"></script>
+    <script type="module">
+        import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
+        document.addEventListener('DOMContentLoaded', () => loadSidebar());
+    </script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>

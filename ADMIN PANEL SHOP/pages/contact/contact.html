@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Admin | Support Links</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/styles/base.css">
+    <link rel="stylesheet" href="contact.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+    <div class="dash-bg-engine"><div class="dash-grid"></div><div class="dash-glow top-left"></div><div class="dash-glow bottom-right"></div></div>
+    <div id="sidebarContainer"></div>
+    <main class="main-content-wrapper">
+        <header class="dash-header glass-header"><div class="header-left"><button id="mobileMenuBtn" class="mobile-menu-toggle" type="button" aria-label="Open sidebar"><i class="fas fa-bars-staggered"></i></button><div class="page-title-box"><h1 id="page-title" class="cyber-title">Support Links</h1><div class="title-underline"></div></div></div><div class="header-right"><div class="live-status"><span class="pulse-dot"></span> <span class="status-text">SYSTEM ONLINE</span></div><button id="sidebarThemeToggle" class="sidebar-theme-toggle" type="button" aria-label="Toggle theme"><i class="fas fa-moon"></i></button><div class="admin-profile-chip"><div class="admin-avatar"><i class="fas fa-user-shield"></i></div><span id="headerAdminEmail" class="admin-email">ADMIN</span></div></div></header>
+        <div class="sections-container custom-scrollbar">
+            <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+                <button class="qa-btn" id="tabLinks" style="flex:1;justify-content:center;background:rgba(188,19,254,0.15);border-color:#bc13fe;"><i class="fas fa-headset"></i> SUPPORT LINKS</button>
+                <button class="qa-btn" id="tabTickets" style="flex:1;justify-content:center;"><i class="fas fa-ticket"></i> TICKETS <span id="ticketBadge" style="background:#ff2a5f;color:#fff;border-radius:50px;padding:2px 8px;font-size:9px;margin-left:6px;">0</span></button>
+            </div>
+            <section class="page-section active-section" id="sectionLinks">
+                <div class="dash-box glass-panel" style="max-width:600px;margin:0 auto;">
+                    <div class="box-header"><h2><i class="fas fa-headset" style="color:#bc13fe;margin-right:8px;"></i> Dynamic Support Links</h2></div>
+                    <div class="form-group"><label>WhatsApp Link</label><input id="setWa" class="form-input" placeholder="https://wa.me/..." type="url"/></div>
+                    <div class="form-group"><label>WhatsApp Number (Display)</label><input id="setWaDisplay" class="form-input" placeholder="+91 9876543210" type="text"/></div>
+                    <div class="form-group"><label>Email Address</label><input id="setEmail" class="form-input" placeholder="support@example.com" type="email"/></div>
+                    <div class="form-group"><label>Telegram Link</label><input id="setTgLogin" class="form-input" placeholder="https://t.me/your_channel" type="url"/></div>
+                    <div class="form-group"><label>Telegram Username (Display)</label><input id="setTgDisplay" class="form-input" placeholder="@your_channel" type="text"/></div>
+                    <div class="form-group"><label>Discord Link</label><input id="setDiscord" class="form-input" placeholder="https://discord.gg/..." type="url"/></div>
+                    <div class="form-group"><label>Discord Server Name (Display)</label><input id="setDiscordDisplay" class="form-input" placeholder="discord.gg/server" type="text"/></div>
+                    <button class="qa-btn" style="width:100%;justify-content:center;padding:14px;background:rgba(188,19,254,0.15);border-color:#bc13fe;" id="btnSaveContact"><i class="fas fa-save"></i> UPDATE SUPPORT LINKS</button>
+                </div>
+            </section>
+            <section class="page-section" id="sectionTickets"></section>
+        </div>
+    </main>
+
+    <div id="contactToastContainer"></div>
+    <div id="contactLoader" class="loader-overlay hidden"><div class="spinner"></div></div>
+
+    <script type="module" src="contact.js"></script>
+    <script type="module">
+        import { loadSidebar } from '../../assets/scripts/sidebar-loader.js';
+        import { markSeen } from '../../assets/scripts/badges.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSidebar();
+            markSeen('tickets');
+        });
+    </script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>

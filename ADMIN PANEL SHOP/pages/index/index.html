@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030305">
+    <title>Nexus Admin | Secure Core</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="index.css">
+    <script src="../../assets/scripts/security.js"></script>
+
+<body>
+
+    <div class="cyber-bg">
+        <div class="cyber-grid"></div>
+        <div class="neon-orb orb-1"></div>
+        <div class="neon-orb orb-2"></div>
+        <div id="particles"></div>
+    </div>
+
+    <div class="login-wrapper">
+        
+        <div class="card-border-glow">
+            <div class="rotating-beam"></div>
+            
+            <div class="card-inner-glass">
+                
+                <div class="vault-header">
+                    <div class="scanner-box">
+                        <i class="fas fa-fingerprint fingerprint-icon"></i>
+                        <div class="scanner-line"></div>
+                    </div>
+                    <h1 class="glitch-title" data-text="ADMIN_CORE">ADMIN_CORE</h1>
+                    <p class="sub-title">LEVEL 9 CLEARANCE REQUIRED</p>
+                </div>
+
+                <form id="adminLoginForm" class="cyber-form" autocomplete="off">
+                    
+                    <div class="input-container">
+                        <i class="fas fa-user-astronaut cyber-icon"></i>
+                        <input type="email" id="adminEmail" placeholder="COMMANDER_ID@NEXUS" required spellcheck="false">
+                        <div class="input-focus-line"></div>
+                    </div>
+
+                    <div class="input-container">
+                        <i class="fas fa-shield-virus cyber-icon"></i>
+                        <input type="password" id="adminPassword" placeholder="ENCRYPTED_KEY" required>
+                        <button type="button" id="toggleEye" class="eye-btn"><i class="fas fa-eye"></i></button>
+                        <div class="input-focus-line"></div>
+                    </div>
+
+                    <div class="options-row">
+                        <label class="cyber-checkbox">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            <span class="cb-text">Store Identity Marker</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" id="adminLoginBtn" class="cyber-btn">
+                        <span class="btn-text">INITIALIZE LINK</span>
+                        <i class="fas fa-network-wired btn-icon"></i>
+                        <div class="btn-scan"></div>
+                    </button>
+
+                </form>
+
+                <div class="status-bar">
+                    <span class="status-dot"></span> SECURE TUNNEL ACTIVE
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script type="module" src="index.js"></script>
+
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('../../sw.js').catch(()=>{});</script>
+</body>
+</html>
