@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nexus Core | Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../../assets/scripts/utils/language.js"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <script src="../../assets/scripts/utils/language.js" defer></script>
     <link rel="stylesheet" href="home.css">
-    <script src="../../assets/scripts/core/security.js"></script>
+    <script src="../../assets/scripts/core/security.js" defer></script>
+    <script src="../../assets/scripts/utils/navigator.js" defer></script>
 
 <body style="background:#030305;" class="text-gray-300 font-sans overflow-x-hidden selection:bg-rose-600 selection:text-white pb-32 relative">
 
@@ -460,7 +461,7 @@
 
 <style>
     :root {
-        --nav-bg-color: rgba(10, 12, 18, 0.85);
+        --nav-bg-color: rgba(10, 12, 18, 0.96);
         --nav-border-color: rgba(255, 255, 255, 0.05);
         --nav-inactive-color: #64748b;
         --nav-active-color: #f43f5e;
@@ -487,6 +488,26 @@
         z-index: 99999;
         transition: transform 0.25s ease;
         will-change: transform;
+    }
+
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+        .bottom-nav {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            background: rgba(10, 12, 18, 0.98);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .bottom-nav {
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+        }
+        .nav-item, .nav-center {
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
     }
 
     .nav-item {

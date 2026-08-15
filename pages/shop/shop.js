@@ -106,7 +106,7 @@ function p(e, t = "success") {
         a.classList.add("out"), setTimeout(() => a.remove(), 400)
     }, 3e3)
 }
-document.addEventListener("DOMContentLoaded", () => {
+function __shopInit() {
     ! function() {
         const e = document.createElement("canvas");
         e.id = "particleCanvas", document.querySelector(".premium-bg-container").after(e);
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 t.beginPath(), t.arc(this.x, this.y, this.size, 0, 2 * Math.PI), t.fillStyle = `rgba(255,255,255,${this.opacity})`, t.fill()
             }
         }
-        for (let e = 0; e < 120; e++) s.push(new o);
+        const P = Math.min(120, window.innerWidth < 768 ? 40 : 120); for (let e = 0; e < P; e++) s.push(new o);
         ! function e() {
             t.clearRect(0, 0, n, a), s.forEach(e => {
                 e.update(), e.draw()
@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         o = Math.sqrt(a * a + i * i);
                     o < 120 && (t.beginPath(), t.moveTo(s[e].x, s[e].y), t.lineTo(s[n].x, s[n].y), t.strokeStyle = `rgba(225,29,72,${.06*(1-o/120)})`, t.lineWidth = .5, t.stroke())
                 }
+            if (!document.getElementById("particleCanvas")) return;
             requestAnimationFrame(e)
         }()
     }(),
@@ -168,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
             a = e.val() || 0
         }), d(), e())
     }()
-}), window.filterStore = function(e) {
+} document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', __shopInit) : __shopInit(), window.filterStore = function(e) {
     t = e, document.querySelectorAll(".category-chip").forEach(t => {
         t.classList.remove("active");
         (t.dataset.category === e) && t.classList.add("active")

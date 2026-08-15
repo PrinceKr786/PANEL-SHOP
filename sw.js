@@ -1,10 +1,10 @@
-const CACHE = 'nexus-store-v8';
+const CACHE = 'nexus-store-v9';
 
 const PRECACHE = [
   'index.html',
   'pages/index/index.html', 'pages/home/home.html', 'pages/shop/shop.html', 'pages/wallet/wallet.html', 'pages/profile/profile.html',
   'pages/index/index.css', 'pages/home/home.css', 'pages/shop/shop.css', 'pages/wallet/wallet.css', 'pages/profile/profile.css', 'assets/styles/core/dark-light-mode.css',
-  'assets/scripts/core/firebase.js', 'pages/index/index.js', 'pages/home/home.js', 'pages/shop/shop.js', 'pages/wallet/wallet.js', 'pages/profile/profile.js', 'assets/scripts/utils/language.js', 'assets/scripts/core/security.js',
+  'assets/scripts/core/firebase.js', 'pages/index/index.js', 'pages/home/home.js', 'pages/shop/shop.js', 'pages/wallet/wallet.js', 'pages/profile/profile.js', 'assets/scripts/utils/language.js', 'assets/scripts/core/security.js', 'assets/scripts/utils/navigator.js',
   'components/pages/hwid-reset.html', 'components/pages/my-keys.html', 'components/pages/referrals.html', 'components/pages/helpdesk.html', 'components/pages/user-settings.html', 'components/pages/payment-settings.html'
 ];
 

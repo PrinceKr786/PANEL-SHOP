@@ -7,7 +7,7 @@ import {
     onAuthStateChanged,
     serverTimestamp
 } from "../../assets/scripts/core/firebase.js";
-document.addEventListener("DOMContentLoaded", () => {
+function __homeInit() {
     function e(e, t, n = 0, s = 600, a = !1) {
         const o = document.getElementById(e);
         if (!o) return;
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     a = s.length > 0 ? Math.min(...s.map(e => parseFloat(e.price || 0))) : 0,
                     o = s.length > 0 ? Math.max(...s.map(e => parseFloat(e.price || 0))) : 0,
                     r = a === o ? `₹${a}` : `₹${a} - ₹${o}`,
-                    i = t.logo ? `<img src="${t.logo}" class="fp-logo">` : '<div class="fp-logo-placeholder"><i class="fas fa-cube"></i></div>';
+                    i = t.logo ? `<img src="${t.logo}" class="fp-logo" loading="lazy" decoding="async">` : '<div class="fp-logo-placeholder"><i class="fas fa-cube"></i></div>';
                 e.innerHTML += `\n                    <div class="snap-center shrink-0 w-[75%] md:w-[30%] featured-panel-card" onclick="window.location.href='../shop/shop.html'" style="animation-delay:${.08*n}s">\n                        <div class="fp-top">\n                            ${i}\n                            <div class="fp-info">\n                                <p class="fp-name">${t.name||"Panel"}</p>\n                                <p class="fp-category">${t.category||"General"}</p>\n                            </div>\n                            <span class="fp-badge">${s.length} Plans</span>\n                        </div>\n                        <div class="fp-bottom">\n                            <span class="fp-price-label">Starting from</span>\n                            <span class="fp-price">${r}</span>\n                        </div>\n                    </div>`
             });
             let s = setInterval(() => {
@@ -197,4 +197,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }), document.getElementById('homeAddFundsBtn')?.addEventListener('click', function() {
         auth.currentUser ? window.location.href = '../wallet/wallet.html' : window.location.href = '../index/index.html?tab=login'
     })
-});
+} document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', __homeInit) : __homeInit();
