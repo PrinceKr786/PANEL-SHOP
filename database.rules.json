@@ -22,7 +22,7 @@
       "$uid": {
         ".read": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
-        ".validate": "newData.child('balance').isNumber() && newData.child('balance').val() >= 0 && (auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || newData.child('balance').val() <= data.child('balance').val() + (data.child('referralClaimable').val() || 0))",
+        ".validate": "newData.child('balance').isNumber() && newData.child('balance').val() >= 0 && (auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || (!data.child('balance').exists() ? newData.child('balance').val() === 0 : newData.child('balance').val() <= data.child('balance').val() + (data.child('referralClaimable').exists() ? data.child('referralClaimable').val() : 0)))",
         "balance": {
           ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || (auth.uid === $uid && newData.val() <= data.val())",
           ".validate": "newData.isNumber() && newData.val() >= 0"
