@@ -8,6 +8,21 @@
     var lastInput = 0;
     var cache = {};
 
+    (function () {
+        if (document.getElementById('nexusPjaxStyle')) return;
+        var st = document.createElement('style');
+        st.id = 'nexusPjaxStyle';
+        st.textContent =
+            'html.pjax .animate-on-view,html.pjax .animate-slide-right,html.pjax .animate-scale-in,html.pjax .animate-fade-up,' +
+            'html.pjax .animate-wallet-in,html.pjax .animate-wallet-up,html.pjax .animate-profile-card,html.pjax .animate-profile-up,' +
+            'html.pjax .animate-count,html.pjax .premium-glass-card{animation:none!important}' +
+            'html.pjax .animate-on-view,html.pjax .animate-slide-right,html.pjax .animate-scale-in,html.pjax .animate-fade-up,' +
+            'html.pjax .animate-wallet-in,html.pjax .animate-wallet-up,html.pjax .animate-profile-card,html.pjax .animate-profile-up{opacity:1!important}' +
+            '.pjax-enter{animation:nexusPjaxFade .15s ease}' +
+            '@keyframes nexusPjaxFade{from{opacity:.35}to{opacity:1}}';
+        document.head.appendChild(st);
+    })();
+
     function onInput() { lastInput = Date.now(); }
     window.addEventListener('scroll', onInput, { passive: true, capture: true });
     document.addEventListener('touchmove', onInput, { passive: true, capture: true });
@@ -33,10 +48,12 @@
         if (doc.querySelector('parsererror')) return false;
         if (!doc.body) return false;
 
+        document.documentElement.classList.add('pjax');
+
         if (doPush) history.pushState({ url: url }, '', url);
 
         var head = document.head;
-        Array.prototype.slice.call(head.querySelectorAll('style')).forEach(function (s) { s.parentNode && s.parentNode.removeChild(s); });
+        Array.prototype.slice.call(head.querySelectorAll('style')).forEach(function (s) { if (s.id === 'nexusPjaxStyle') return; s.parentNode && s.parentNode.removeChild(s); });
         Array.prototype.slice.call(head.querySelectorAll('link[rel="stylesheet"]')).forEach(function (l) {
             var h = l.href || '';
             if (h.indexOf('tailwind') === -1 && h.indexOf('font-awesome') === -1 && h.indexOf('cdnjs') === -1) {
@@ -65,7 +82,15 @@
         scripts.forEach(function (s) { s.parentNode && s.parentNode.removeChild(s); });
 
         var oldBody = document.body;
+        var oldBal = oldBody.querySelector('#headerLiveBalance');
+        var newBal = newBody.querySelector('#headerLiveBalance');
+        if (oldBal && newBal) {
+            newBal.textContent = oldBal.textContent;
+            if (oldBal.hasAttribute('data-inr')) newBal.setAttribute('data-inr', oldBal.getAttribute('data-inr'));
+        }
+
         oldBody.parentNode.replaceChild(newBody, oldBody);
+        newBody.classList.add('pjax-enter');
 
         scripts.forEach(function (old) {
             var s = document.createElement('script');
