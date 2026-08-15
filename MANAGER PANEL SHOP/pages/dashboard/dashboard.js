@@ -27,12 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     n && (n.innerText = a)
                 })
             };
-            t("crypto_deposits", "statPendingCrypto"), t("manual_deposits", "statPendingManual"), onValue(ref(db, "users"), t => {
+            t("gateway_payments", "statPendingGateway"), t("manual_deposits", "statPendingManual"), onValue(ref(db, "users"), t => {
                 const e = document.getElementById("statUsers");
                 e && (e.innerText = t.size || Object.keys(t.val() || {}).length)
             })
         }
-        const [a, n] = await Promise.all([get(query(ref(db, "crypto_deposits"), limitToLast(500))), get(query(ref(db, "manual_deposits"), limitToLast(500)))]);
+        const [a, n] = await Promise.all([get(query(ref(db, "gateway_payments"), limitToLast(500))), get(query(ref(db, "manual_deposits"), limitToLast(500)))]);
         let o = [],
             i = [];
         a.forEach(t => {
@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             n || (n = i);
                             const s = Math.min((i - n) / 1e3, 1);
                             let r = s * (a - e) + e;
-                            t.innerHTML = "₹" + r.toFixed(2), s < 1 ? requestAnimationFrame(o) : t.innerHTML = "₹" + a.toFixed(2)
+                            t.innerHTML = "â‚¹" + r.toFixed(2), s < 1 ? requestAnimationFrame(o) : t.innerHTML = "â‚¹" + a.toFixed(2)
                         };
                         requestAnimationFrame(o)
-                    }(i, parseFloat(i.innerText.replace("₹", "")) || 0, n),
+                    }(i, parseFloat(i.innerText.replace("â‚¹", "")) || 0, n),
                     function(t) {
                         const e = document.getElementById("recentPaymentsList");
                         if (!e) return;
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 n = "rejected" === t.status,
                                 o = e ? "#00ff66" : n ? "#ff3366" : "#ffaa00";
                             let i = '<i class="fas fa-hand-holding-usd" style="color:#00ff66;"></i>';
-                            t.id && (t.id.startsWith("ORD") || t.id.length > 10) && (i = '<i class="fas fa-bolt" style="color:#ff3366;"></i>'), a += `\n            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px;">\n                <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.05);display:flex;justify-content:center;align-items:center;font-size:16px;">${i}</div>\n                <div style="flex:1;min-width:0;"><strong style="display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.email||t.uid||"Unknown"}</strong><span style="font-size:11px;color:#888888;">${t.timestamp?new Date(t.timestamp).toLocaleDateString():""}${t.id?" &bull; Ref: "+t.id.substring(0,8)+"...":""}</span></div>\n                <div style="font-weight:700;font-size:14px;color:${o};">₹${t.amount}</div>\n            </div>`
+                            t.id && (t.id.startsWith("ORD") || t.id.length > 10) && (i = '<i class="fas fa-bolt" style="color:#ff3366;"></i>'), a += `\n            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px;">\n                <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.05);display:flex;justify-content:center;align-items:center;font-size:16px;">${i}</div>\n                <div style="flex:1;min-width:0;"><strong style="display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.email||t.uid||"Unknown"}</strong><span style="font-size:11px;color:#888888;">${t.timestamp?new Date(t.timestamp).toLocaleDateString():""}${t.id?" &bull; Ref: "+t.id.substring(0,8)+"...":""}</span></div>\n                <div style="font-weight:700;font-size:14px;color:${o};">â‚¹${t.amount}</div>\n            </div>`
                         }), e.innerHTML = a
                     }(o.slice(0, 5)), async function(e) {
                         window.Chart || await new Promise(t => {
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             data: {
                                 labels: o,
                                 datasets: [{
-                                    label: "Revenue (₹)",
+                                    label: "Revenue (â‚¹)",
                                     data: s,
                                     borderColor: "#bc13fe",
                                     backgroundColor: "rgba(188, 19, 254, 0.1)",
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                         bodyColor: "#00ff66",
                                         displayColors: !1,
                                         callbacks: {
-                                            label: t => "₹ " + t.parsed.y
+                                            label: t => "â‚¹ " + t.parsed.y
                                         }
                                     }
                                 },
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             color: "rgba(255,255,255,0.05)"
                                         },
                                         ticks: {
-                                            callback: t => "₹" + t
+                                            callback: t => "â‚¹" + t
                                         }
                                     }
                                 }

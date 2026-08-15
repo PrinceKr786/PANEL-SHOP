@@ -22,13 +22,14 @@
       "$uid": {
         ".read": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
+        ".validate": "newData.child('balance').isNumber() && newData.child('balance').val() >= 0 && (auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || newData.child('balance').val() <= data.child('balance').val() + (data.child('referralClaimable').val() || 0))",
         "balance": {
-          ".write": "auth.uid === $uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || (auth.uid === $uid && newData.val() <= data.val())",
           ".validate": "newData.isNumber() && newData.val() >= 0"
         },
         "referralClaimable": {
           ".write": "auth.uid === $uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || root.child('referrals').child($uid).hasChild(auth.uid)",
-          ".validate": "newData.isNumber() && newData.val() >= 0 && (auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || (auth.uid !== $uid && newData.val() <= data.val() + 10000) || (auth.uid === $uid && newData.val() <= data.val()))"
+          ".validate": "newData.isNumber() && newData.val() >= 0 && (auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || (auth.uid !== $uid && newData.val() <= data.val() + 5) || (auth.uid === $uid && newData.val() <= data.val()))"
         },
         "banned": { ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'" },
         "status": {
@@ -115,7 +116,7 @@
     },
 
     "gateway_payments": {
-      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
+      ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$orderId": {
         ".write": "!data.exists() || auth.uid === data.child('uid').val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         ".read": "auth != null",
@@ -194,7 +195,10 @@
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$referrerUid": {
         ".read": "$referrerUid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
-        ".write": "auth != null"
+        "$newUid": {
+          ".write": "$newUid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
+          ".validate": "newData.hasChildren(['email', 'date', 'deposited', 'commission']) && newData.child('email').val().matches(/^[^@]+@[^@]+[.][^@]+$/) && newData.child('date').isNumber() && newData.child('deposited').isNumber() && newData.child('deposited').val() >= 0 && newData.child('commission').isNumber() && newData.child('commission').val() >= 0"
+        }
       }
     },
 
@@ -202,7 +206,7 @@
       ".read": true,
       "$username": {
         ".write": "auth != null",
-        ".validate": "newData.val() === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
+        ".validate": "(!data.exists() && newData.val() === auth.uid) || newData.val() === data.val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
       }
     },
 
