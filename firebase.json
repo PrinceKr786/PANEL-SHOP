@@ -7,7 +7,7 @@
       "docs/**"
     ],
     "rewrites": [
-      { "source": "/", "destination": "/pages/index/index.html" }
+      { "source": "/", "destination": "/pages/home/home.html" }
     ]
   }
 }

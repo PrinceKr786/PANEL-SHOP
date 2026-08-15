@@ -10,8 +10,8 @@ Firebase-powered user dashboard/storefront. Users can create accounts, browse pa
 ```
 PANEL STORE/
 │
-├── firebase.json              Firebase Hosting config. Serves pages/index/index.html on root "/".
-│                               All other routes also served via index.html (SPA-like rewrites).
+├── firebase.json              Firebase Hosting config. Serves pages/home/home.html on root "/".
+│                               Root redirect: index.html → pages/home/home.html.
 │
 ├── package.json               Keeps list of NPM dependencies (terser, obfuscator).
 │                               Run "npm install" to download node_modules/ folder.
@@ -100,9 +100,11 @@ PANEL STORE/
 
 ### 1. USER VISITS SITE
 ```
-User types your domain → Firebase Hosting serves pages/index/index.html
-→ Login/Signup page loads
-→ User sees: Login form | Register form | Google login button
+User types your domain → Firebase Hosting serves pages/home/home.html
+→ Home page loads (PUBLIC - no login needed)
+→ User can browse: Home | Panel Store | Wallet | Profile as guest
+→ Login/Register only required when taking an action (buy panel, add funds, etc.)
+→ Navbar shows LOGIN / REGISTER buttons for guests
 ```
 
 ### 2. USER CREATES ACCOUNT (Signup)
@@ -423,7 +425,7 @@ firebase serve
       NOTE: payment-settings.html only inlines the notifications popup (it never had
       the user menu or bottom nav).
    g) {page}.js (ES module, imports firebase.js)
-      - onAuthStateChanged → if not logged in, redirect to login
+      - onAuthStateChanged → guest mode if not logged in (browsing allowed); login required only on actions (buy/add funds/etc.)
       - Loads data from Firebase (onValue for real-time)
       - Sets up event listeners
 3. Page is interactive
