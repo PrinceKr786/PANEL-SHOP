@@ -74,10 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const e = ref(db, "tickets");
                 onValue(e, e => {
                     const t = e.val() || {},
-                        n = Object.entries(t).map(([e, t]) => ({
-                            id: e,
-                            ...t
+                        n = [];
+                    Object.entries(t).forEach(([uid, tickets]) => {
+                        Object.entries(tickets || {}).forEach(([tid, tk]) => n.push({
+                            id: tid,
+                            uid,
+                            ...tk
                         }));
+                    });
                     ! function(e) {
                         const t = e.filter(e => "open" === e.status || "pending" === e.status).length,
                             a = document.getElementById("ticketBadge");
@@ -112,21 +116,21 @@ document.addEventListener("DOMContentLoaded", () => {
                                     other: "fa-circle-question"
                                 } [e.category] || "fa-circle-question",
                                 d = document.createElement("div");
-                            d.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;transition:0.3s;", d.innerHTML = `\n            <div style="display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">\n                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">\n                    <span style="background:${n?"rgba(0,255,102,0.15)":"rgba(255,255,255,0.05)"};color:${n?"#00ff66":"#888"};font-size:9px;font-weight:800;padding:3px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:0.5px;">${e.status}</span>\n                    <span style="background:rgba(255,255,255,0.05);color:${i};font-size:9px;font-weight:700;padding:3px 10px;border-radius:50px;text-transform:uppercase;border:1px solid ${i}30;">${e.priority}</span>\n                    <span style="color:#888;font-size:10px;"><i class="fas ${o}" style="margin-right:4px;"></i>${e.category}</span>\n                </div>\n                <span style="color:#666;font-size:10px;font-family:'Space Mono',monospace;">${t}</span>\n            </div>\n            <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">${a(e.subject)}</div>\n            <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:#888;margin-bottom:8px;">\n                <span><i class="fas fa-user" style="color:#00f0ff;width:14px;"></i> ${a(e.username||"N/A")}</span>\n                <span><i class="fas fa-envelope" style="color:#bc13fe;width:14px;"></i> ${a(e.email)}</span>\n                <span><i class="fas fa-wallet" style="color:#00ff66;width:14px;"></i> ₹${parseFloat(e.balance||0).toFixed(2)}</span>\n                ${e.txnId?`<span><i class="fas fa-hashtag" style="color:#ffaa00;width:14px;"></i> ${a(e.txnId)}</span>`:""}\n            </div>\n            <div style="font-size:12px;color:#b0b5c5;background:rgba(0,0,0,0.3);border-radius:10px;padding:12px;margin-bottom:10px;line-height:1.6;white-space:pre-wrap;">${a(e.message)}</div>\n            ${e.adminReply?`<div style="font-size:12px;color:#00f0ff;background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.12);border-radius:10px;padding:12px;margin-bottom:10px;line-height:1.6;"><i class="fas fa-reply" style="margin-right:6px;"></i> <b>Admin Reply:</b> ${a(e.adminReply)}</div>`:""}\n            <div style="display:flex;gap:8px;flex-wrap:wrap;${n?"":"display:none;"}">\n                <input type="text" id="replyInput_${e.id}" class="form-input" placeholder="Type your reply..." style="flex:1;min-width:140px;padding:10px 14px;font-size:12px;" />\n                <button class="qa-btn ticket-reply-btn" data-id="${e.id}" data-email="${e.email}" data-username="${a(e.username||"N/A")}" style="padding:10px 18px;white-space:nowrap;font-size:10px;"><i class="fas fa-reply"></i> REPLY</button>\n                <button class="qa-btn ticket-close-btn" data-id="${e.id}" style="padding:10px 18px;white-space:nowrap;font-size:10px;background:rgba(255,42,95,0.1);border-color:#ff2a5f;"><i class="fas fa-check"></i> CLOSE</button>\n            </div>\n        `, s.appendChild(d)
+                            d.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;transition:0.3s;", d.innerHTML = `\n            <div style="display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">\n                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">\n                    <span style="background:${n?"rgba(0,255,102,0.15)":"rgba(255,255,255,0.05)"};color:${n?"#00ff66":"#888"};font-size:9px;font-weight:800;padding:3px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:0.5px;">${e.status}</span>\n                    <span style="background:rgba(255,255,255,0.05);color:${i};font-size:9px;font-weight:700;padding:3px 10px;border-radius:50px;text-transform:uppercase;border:1px solid ${i}30;">${e.priority}</span>\n                    <span style="color:#888;font-size:10px;"><i class="fas ${o}" style="margin-right:4px;"></i>${e.category}</span>\n                </div>\n                <span style="color:#666;font-size:10px;font-family:'Space Mono',monospace;">${t}</span>\n            </div>\n            <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">${a(e.subject)}</div>\n            <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:#888;margin-bottom:8px;">\n                <span><i class="fas fa-user" style="color:#00f0ff;width:14px;"></i> ${a(e.username||"N/A")}</span>\n                <span><i class="fas fa-envelope" style="color:#bc13fe;width:14px;"></i> ${a(e.email)}</span>\n                <span><i class="fas fa-wallet" style="color:#00ff66;width:14px;"></i> ₹${parseFloat(e.balance||0).toFixed(2)}</span>\n                ${e.txnId?`<span><i class="fas fa-hashtag" style="color:#ffaa00;width:14px;"></i> ${a(e.txnId)}</span>`:""}\n            </div>\n            <div style="font-size:12px;color:#b0b5c5;background:rgba(0,0,0,0.3);border-radius:10px;padding:12px;margin-bottom:10px;line-height:1.6;white-space:pre-wrap;">${a(e.message)}</div>\n            ${e.adminReply?`<div style="font-size:12px;color:#00f0ff;background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.12);border-radius:10px;padding:12px;margin-bottom:10px;line-height:1.6;"><i class="fas fa-reply" style="margin-right:6px;"></i> <b>Admin Reply:</b> ${a(e.adminReply)}</div>`:""}\n            <div style="display:flex;gap:8px;flex-wrap:wrap;${n?"":"display:none;"}">\n                <input type="text" id="replyInput_${e.id}" class="form-input" placeholder="Type your reply..." style="flex:1;min-width:140px;padding:10px 14px;font-size:12px;" />\n                <button class="qa-btn ticket-reply-btn" data-id="${e.id}" data-uid="${e.uid}" data-email="${e.email}" data-username="${a(e.username||"N/A")}" style="padding:10px 18px;white-space:nowrap;font-size:10px;"><i class="fas fa-reply"></i> REPLY</button>\n                <button class="qa-btn ticket-close-btn" data-id="${e.id}" data-uid="${e.uid}" style="padding:10px 18px;white-space:nowrap;font-size:10px;background:rgba(255,42,95,0.1);border-color:#ff2a5f;"><i class="fas fa-check"></i> CLOSE</button>\n            </div>\n        `, s.appendChild(d)
                         })
                     }(n)
                 })
             }(), document.getElementById("btnSaveContact")?.addEventListener("click", t), document.getElementById("tabLinks")?.addEventListener("click", () => e("links")), document.getElementById("tabTickets")?.addEventListener("click", () => e("tickets")), document.getElementById("sectionTickets").addEventListener("click", e => {
                 if (e.target.closest(".ticket-reply-btn")) {
                     const t = e.target.closest(".ticket-reply-btn");
-                    !async function(e, t, a) {
+                    !async function(e, t, a, u) {
                         const o = document.getElementById(`replyInput_${e}`),
                             d = o?.value.trim();
                         if (d) {
                             s();
                             try {
-                                const s = (await get(ref(db, `tickets/${e}`))).val() || {};
-                                await update(ref(db, `tickets/${e}`), {
+                                const s = (await get(ref(db, `tickets/${u}/${e}`))).val() || {};
+                                await update(ref(db, `tickets/${u}/${e}`), {
                                     adminReply: d,
                                     status: "open",
                                     repliedAt: serverTimestamp()
@@ -143,20 +147,20 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                             i()
                         } else n("Please type a reply", "error")
-                    }(t.dataset.id, t.dataset.email, t.dataset.username)
+                    }(t.dataset.id, t.dataset.email, t.dataset.username, t.dataset.uid)
                 }
-                e.target.closest(".ticket-close-btn") && async function(e) {
+                e.target.closest(".ticket-close-btn") && async function(e, u) {
                     s();
                     try {
-                        await update(ref(db, `tickets/${e}`), {
+                        await update(ref(db, `tickets/${u}/${e}`), {
                             status: "closed",
                             closedAt: serverTimestamp()
-                        }), await logAudit("close_ticket", { ticketId: e }), n("Ticket closed")
+                        }), await logAudit("close_ticket", { ticketId: e, uid: u }), n("Ticket closed")
                     } catch (e) {
                         n("Failed to close ticket", "error")
                     }
                     i()
-                }(e.target.closest(".ticket-close-btn").dataset.id)
+                }(e.target.closest(".ticket-close-btn").dataset.id, e.target.closest(".ticket-close-btn").dataset.uid)
             })
     })
 });

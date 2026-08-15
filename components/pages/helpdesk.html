@@ -881,7 +881,7 @@
                 if (!category || !subject || !message) { showToast('Please fill all required fields', 'error'); btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Ticket'; btn.style.pointerEvents = 'auto'; return; }
                 const userSnap = await get(ref(db, `users/${user.uid}`));
                 const userData = userSnap.exists() ? userSnap.val() : {};
-                await push(ref(db, 'tickets'), {
+                await push(ref(db, 'tickets/' + user.uid), {
                     uid: user.uid,
                     username: userData.username || 'Unknown',
                     email: user.email,
@@ -999,9 +999,9 @@ onAuthStateChanged(auth, (user) => {
 if (!user) return window.location.href = "../../pages/index/index.html?tab=login";
             const section = document.getElementById('myTicketsSection');
             section.style.display = '';
-            onValue(ref(db, 'tickets'), (snap) => {
+            onValue(ref(db, 'tickets/' + user.uid), (snap) => {
                 const data = snap.val() || {};
-                const tickets = Object.entries(data).filter(([, t]) => t.uid === user.uid).map(([id, t]) => ({ id, ...t }));
+                const tickets = Object.entries(data).map(([id, t]) => ({ id, ...t }));
                 const list = document.getElementById('myTicketsList');
                 if (!tickets.length) {
                     list.innerHTML = `<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-size:12px;">No tickets submitted yet</div>`;

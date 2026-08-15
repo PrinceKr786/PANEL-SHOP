@@ -20,7 +20,7 @@
     "users": {
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$uid": {
-        ".read": "$uid === auth.uid",
+        ".read": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         "balance": {
           ".write": "auth.uid === $uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
@@ -33,7 +33,7 @@
         "banned": { ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'" },
         "status": {
           ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || auth.uid === $uid",
-          ".validate": "newData.val() === data.val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
+          ".validate": "(!data.exists() && newData.val() === 'active') || newData.val() === data.val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
         },
         "role": {
           ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || newData.val() === 'user'",
@@ -52,10 +52,10 @@
         ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         "$txId": {
           ".validate": "newData.hasChildren(['type', 'amount', 'status', 'date', 'desc'])",
-          "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "amount": { ".validate": "newData.isNumber() && (newData.val() > 0 || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid))" },
           "status": {
-            ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
-            ".validate": "newData.val().matches(/^(pending|completed|success|failed)$/)"
+            ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || auth.uid === $uid",
+            ".validate": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || newData.val().matches(/^(pending|success|failed)$/)"
           },
           "type": { ".validate": "newData.val().matches(/^(deposit_manual|deposit_auto|deposit_gateway|deposit_crypto|purchase|refund|admin_edit)$/)" }
         }
@@ -84,9 +84,9 @@
         "category": { ".validate": "newData.isString()" },
         "plans": {
           "$planKey": {
-            ".validate": "newData.hasChildren(['name', 'price'])",
+            ".validate": "newData.hasChildren(['label', 'price'])",
             "price": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-            "name": { ".validate": "newData.isString() && newData.val().length > 0" }
+            "label": { ".validate": "newData.isString() && newData.val().length > 0" }
           }
         }
       }
@@ -107,7 +107,7 @@
       ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$code": {
         ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
-        "usageCount": {
+        "used": {
           ".write": "auth != null",
           ".validate": "newData.val() === data.val() + 1"
         }
@@ -117,14 +117,14 @@
     "gateway_payments": {
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$orderId": {
-        ".write": "auth != null",
+        ".write": "!data.exists() || auth.uid === data.child('uid').val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
         ".read": "auth != null",
         ".validate": "newData.hasChildren(['uid', 'amount', 'status', 'timestamp'])",
         "uid": { ".validate": "newData.val() === auth.uid" },
         "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
         "status": {
-          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
-          ".validate": "newData.val().matches(/^(pending|completed|approved|failed)$/)"
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || newData.val().matches(/^(pending|approved|failed)$/)",
+          ".validate": "newData.val().matches(/^(pending|completed|approved|failed|rejected)$/)"
         }
       }
     },
@@ -132,15 +132,15 @@
     "manual_deposits": {
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$txId": {
-        ".write": "auth != null",
+        ".write": "!data.exists() || auth.uid === data.child('uid').val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         ".read": "auth != null",
         ".validate": "newData.hasChildren(['uid', 'amount', 'status', 'utr', 'timestamp'])",
         "uid": { ".validate": "newData.val() === auth.uid" },
         "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
         "utr": { ".validate": "newData.isString() && newData.val().length > 0" },
         "status": {
-          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
-          ".validate": "newData.val().matches(/^(pending|completed|approved|failed)$/)"
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || newData.val() === 'pending'",
+          ".validate": "newData.val().matches(/^(pending|completed|approved|failed|rejected)$/)"
         }
       }
     },
@@ -148,14 +148,14 @@
     "crypto_deposits": {
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$txId": {
-        ".write": "auth != null",
+        ".write": "!data.exists() || auth.uid === data.child('uid').val() || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         ".read": "auth != null",
         ".validate": "newData.hasChildren(['uid', 'email', 'amount', 'status', 'timestamp'])",
         "uid": { ".validate": "newData.val() === auth.uid" },
         "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
         "status": {
-          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
-          ".validate": "newData.val().matches(/^(pending|approved|failed)$/)"
+          ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || newData.val() === 'pending'",
+          ".validate": "newData.val().matches(/^(pending|approved|failed|rejected)$/)"
         }
       }
     },
@@ -186,14 +186,14 @@
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
+        ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)"
       }
     },
 
     "referrals": {
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2'",
       "$referrerUid": {
-        ".read": "$referrerUid === auth.uid",
+        ".read": "$referrerUid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         ".write": "auth != null"
       }
     },
@@ -244,14 +244,15 @@
       ".read": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "auth != null",
+        ".write": "$uid === auth.uid || auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
         "$ticketId": {
-          ".validate": "newData.hasChildren(['subject', 'message', 'category', 'status', 'timestamp', 'uid'])",
+          ".validate": "newData.hasChildren(['subject', 'message', 'category', 'status', 'uid'])",
           "uid": { ".validate": "newData.val() === auth.uid" },
           "status": {
-            ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)",
+            ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid) || (auth.uid === $uid && newData.val() === 'open')",
             ".validate": "newData.val().matches(/^(open|closed|resolved)$/)"
           },
+          "adminReply": { ".write": "auth.uid === 'rOlsx6LYYYXPYLkueN2UmviaB8O2' || root.child('managers').hasChild(auth.uid)" },
           "subject": { ".validate": "newData.isString() && newData.val().length > 0" },
           "message": { ".validate": "newData.isString() && newData.val().length > 0" }
         }

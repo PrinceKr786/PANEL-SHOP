@@ -1,4 +1,4 @@
-﻿const CACHE = 'nexus-admin-v7';
+﻿const CACHE = 'nexus-admin-v8';
 const STATIC_ASSETS = [
   'pages/index/index.html', 'pages/dashboard/dashboard.html', 'pages/users/users.html', 'pages/purchases/purchases.html',
   'pages/gateway/gateway.html', 'pages/manual/manual.html', 'pages/crypto/crypto.html',
