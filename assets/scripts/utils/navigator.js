@@ -16,7 +16,7 @@
         try {
             var u = new URL(href, location.href);
             if (u.origin !== location.origin) return false;
-            return /^\/(home|shop|wallet|profile)\/([\w-]+)\.html/.test(u.pathname);
+            return /^\/(home|shop|wallet|profile|components\/pages)\/([\w-]+)\.html/.test(u.pathname);
         } catch (e) { return false; }
     }
 
@@ -141,9 +141,8 @@
 
     if ('requestIdleCallback' in window) {
         window.requestIdleCallback(function () {
-            var base = location.pathname.replace(/\/(home|shop|wallet|profile)\/([\w-]+)\.html/, '/');
             ROUTE_PAGES.forEach(function (p) {
-                var u = location.origin + base + p + '/' + p + '.html';
+                var u = location.origin + '/pages/' + p + '/' + p + '.html';
                 if (u !== location.href && !cache[u]) {
                     fetch(u, { credentials: 'same-origin' }).then(function (r) {
                         if (r.ok) return r.text();
