@@ -6,6 +6,7 @@ node_modules/
 
 # Backups / build artifacts
 backups/
+_backup_original_root/
 js_backup/
 _build/
 *.log
