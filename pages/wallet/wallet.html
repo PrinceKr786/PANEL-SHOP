@@ -495,7 +495,8 @@
         position: fixed;
         left: 50%;
         bottom: 20px;
-        transform: translateX(-50%);
+        bottom: calc(20px + env(safe-area-inset-bottom));
+        transform: translate3d(-50%, 0, 0);
         width: min(94%, 500px);
         height: 75px;
         background: var(--nav-bg-color);
@@ -509,8 +510,9 @@
         padding: 0 10px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
         z-index: 99999;
-        transition: transform 0.25s ease;
-        will-change: transform;
+        backface-visibility: hidden;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -623,7 +625,27 @@
         color: rgba(255,255,255,0.15); pointer-events: none; z-index: 99999;
     }
 
-    .bottom-nav.hidden { transform: translateX(-50%) translateY(150px); }
+    .bottom-nav.hidden {
+        transform: translate3d(-50%, calc(100% + 30px), 0);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .nav-page-label {
+        transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .bottom-nav.hidden + .nav-page-label,
+    .nav-page-label.hidden {
+        opacity: 0;
+        transform: translateX(-50%) translateY(16px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .bottom-nav, .nav-page-label {
+            transition: none !important;
+        }
+    }
 </style>
 
 <script>
@@ -649,10 +671,14 @@
         });
     });
 
-    var prev = 0, hidden = !1, bar = document.getElementById("bottomNav");
+    var prev = 0, hidden = !1, bar = document.getElementById("bottomNav"), navLabel = document.getElementById("navPageLabel");
     window.addEventListener("scroll", function() {
-        var c = window.pageYOffset, hide = c > prev && c > 80;
-        if (hide !== hidden) { bar.classList.toggle("hidden", hide); hidden = hide }
+        var c = window.pageYOffset, hide = c > prev && c > 120;
+        if (hide !== hidden) {
+            bar.classList.toggle("hidden", hide);
+            if (navLabel) navLabel.classList.toggle("hidden", hide);
+            hidden = hide
+        }
         prev = c;
     }, { passive: !0 });
 
