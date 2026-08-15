@@ -206,7 +206,7 @@ body {
 @media (max-width: 768px) {
     .mobile-menu-toggle { display: block; }
     .dash-header { padding: 0 16px; }
-    .sections-container { padding: 18px; }
+    .sections-container { padding: 18px; overflow-x: auto; }
     .live-status { display: none; }
 
     .cyber-title { font-size: 18px; letter-spacing: 1.5px; max-width: 140px; }
@@ -216,4 +216,12 @@ body {
     .header-right .sidebar-theme-toggle { width: 36px; height: 36px; }
     .admin-profile-chip { padding: 5px 12px 5px 8px; gap: 8px; }
     .admin-email { display: none; }
+
+    .dash-box { padding: 15px; }
+    .dash-box .box-header { flex-wrap: wrap; gap: 10px; }
+    .dash-box .box-header > div { flex-wrap: wrap; }
+    .search-box { width: 100% !important; }
+    .search-box input { font-size: 14px; }
+    .dash-box.glass-panel { overflow-x: auto; overflow-y: hidden; }
+    .panel-grid { grid-template-columns: 1fr; }
 }
